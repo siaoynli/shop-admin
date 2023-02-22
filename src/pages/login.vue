@@ -1,55 +1,43 @@
 <template>
-  <el-row class="bg-indigo-500 min-h-screen">
-    <el-col :lg="16" :md="12" class="flex justify-center items-center">
+  <el-row class="login-container">
+    <el-col :lg="16" :md="12" class="left">
       <div>
-        <div class="font-bold text-5xl text-light-50 mb-5">
-          欢迎登陆后台管理系统
-        </div>
-        <div class="text-gray-200 text-xl">
-          Vite Admin 中台前端/设计解决方案
-        </div>
+        <div>欢迎登陆后台管理系统</div>
+        <div>Vite Admin 中台前端/设计解决方案</div>
       </div>
     </el-col>
-    <el-col
-      :lg="8"
-      :md="12"
-      class="bg-light-50 flex justify-center items-center flex-col"
-    >
-      <div class="font-bold text-3xl text-gray-800">欢迎回来</div>
-      <div
-        class="flex justify-center items-center my-5 text-gray-300 space-x-2"
-      >
-        <span class="h-[1px] w-16 bg-gray-200"></span><span>账号密码登陆</span
-        ><span class="h-[1px] w-16 bg-gray-200"></span>
+    <el-col :lg="8" :md="12" class="right">
+      <div>欢迎回来</div>
+      <div class="sub-title">
+        <span></span><span>账号密码登陆</span><span></span>
       </div>
-      <div>
-        <el-form :model="form" class="w-[250px]">
-          <el-form-item>
-            <el-input
-              v-model="form.username"
-              placeholder="请输入用户名"
-              :prefix-icon="User"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              v-model="form.password"
-              placeholder="请输入密码"
-              :prefix-icon="Lock"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              class="w-[250px]"
-              round
-              color="#626aef"
-              @click="onSubmit"
-              >登陆</el-button
-            >
-          </el-form-item>
-        </el-form>
-      </div>
+
+      <el-form :model="form" class="w-[250px]">
+        <el-form-item>
+          <el-input
+            v-model="form.username"
+            placeholder="请输入用户名"
+            :prefix-icon="User"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="form.password"
+            placeholder="请输入密码"
+            :prefix-icon="Lock"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            class="w-[250px]"
+            round
+            color="#626aef"
+            @click="onSubmit"
+            >登陆</el-button
+          >
+        </el-form-item>
+      </el-form>
     </el-col>
   </el-row>
 </template>
@@ -67,3 +55,39 @@ const onSubmit = () => {
   console.log('submit!')
 }
 </script>
+
+<style scoped>
+.login-container {
+  @apply bg-indigo-500 min-h-screen;
+}
+
+.login-container .left,
+.login-container .right {
+  @apply flex justify-center items-center;
+}
+
+.login-container .right {
+  @apply bg-light-50  flex-col;
+}
+
+.left > div > div:first-child {
+  @apply font-bold text-5xl text-light-50 mb-5;
+}
+
+.left > div > div:last-child {
+  @apply text-gray-200 text-xl;
+}
+
+.right > div:first-child {
+  @apply font-bold text-3xl text-gray-800;
+}
+
+.right .sub-title {
+  @apply flex justify-center items-center my-5 text-gray-300 space-x-2;
+}
+
+.sub-title > span:first-child,
+.sub-title > span:last-child {
+  @apply h-[1px] w-16 bg-gray-200;
+}
+</style>
