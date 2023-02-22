@@ -12,19 +12,26 @@
         <span></span><span>账号密码登陆</span><span></span>
       </div>
 
-      <el-form :model="form" class="w-[250px]">
-        <el-form-item>
+      <el-form
+        ref="loginFormRef"
+        :model="form"
+        class="w-[250px]"
+        :rules="rules"
+      >
+        <el-form-item prop="username">
           <el-input
             v-model="form.username"
             placeholder="请输入用户名"
             :prefix-icon="User"
           />
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
             v-model="form.password"
             placeholder="请输入密码"
             :prefix-icon="Lock"
+            type="password"
+            show-password
           />
         </el-form-item>
         <el-form-item>
@@ -43,16 +50,41 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { Lock, User } from '@element-plus/icons-vue'
+
+const loginFormRef = ref(null)
 // do not use same name with ref
 const form = reactive({
   username: '',
   password: ''
 })
 
+const rules = {
+  username: [
+    {
+      required: true,
+      message: '请输入用户名',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码',
+      trigger: 'blur'
+    }
+  ]
+}
+
 const onSubmit = () => {
-  console.log('submit!')
+  loginFormRef.value.validate((valid, fields) => {
+    if (valid) {
+      console.log('submit!')
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
 }
 </script>
 
