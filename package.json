@@ -25,6 +25,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.9.0",
     "husky": "^8.0.3",
+    "lint-staged": "^13.1.2",
     "prettier": "^2.8.4",
     "vite": "^4.1.4",
     "vite-plugin-eslint": "^1.8.1",
@@ -35,5 +36,19 @@
     "commitizen": {
       "path": "node_modules/cz-customizable"
     }
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.vue": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{less,css}": [
+      "prettier --write"
+    ]
   }
+
 }
