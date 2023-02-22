@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import WindiCSS from 'vite-plugin-windicss'
 import eslintPlugin from 'vite-plugin-eslint'
 
+import path from 'path'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -11,5 +13,10 @@ export default defineConfig({
     eslintPlugin({
       include: ['src/**/*.js', 'src/**/*.vue', 'src/*.js', 'src/*.vue']
     })
-  ]
+  ],
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, 'src')
+    }
+  }
 })
