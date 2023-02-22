@@ -1,6 +1,6 @@
 <template>
   <el-row class="bg-indigo-500 min-h-screen">
-    <el-col :span="16" class="flex justify-center items-center">
+    <el-col :lg="16" :md="12" class="flex justify-center items-center">
       <div>
         <div class="font-bold text-5xl text-light-50 mb-5">
           欢迎登陆后台管理系统
@@ -11,7 +11,8 @@
       </div>
     </el-col>
     <el-col
-      :span="8"
+      :lg="8"
+      :md="12"
       class="bg-light-50 flex justify-center items-center flex-col"
     >
       <div class="font-bold text-3xl text-gray-800">欢迎回来</div>
@@ -24,10 +25,18 @@
       <div>
         <el-form :model="form" class="w-[250px]">
           <el-form-item>
-            <el-input v-model="form.username" placeholder="请输入用户名" />
+            <el-input
+              v-model="form.username"
+              placeholder="请输入用户名"
+              :prefix-icon="User"
+            />
           </el-form-item>
           <el-form-item>
-            <el-input v-model="form.password" placeholder="请输入密码" />
+            <el-input
+              v-model="form.password"
+              placeholder="请输入密码"
+              :prefix-icon="Lock"
+            />
           </el-form-item>
           <el-form-item>
             <el-button
@@ -47,7 +56,7 @@
 
 <script setup>
 import { reactive } from 'vue'
-
+import { Lock, User } from '@element-plus/icons-vue'
 // do not use same name with ref
 const form = reactive({
   username: '',
