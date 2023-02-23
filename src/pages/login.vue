@@ -54,9 +54,9 @@
 import { reactive, ref } from 'vue'
 import { Lock, User } from '@element-plus/icons-vue'
 import { login, getinfo } from '~/api/manager'
-import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { setToken } from '~/composables/auth'
+import { toast } from '~/composables/utils'
 
 const loginFormRef = ref(null)
 const loading = ref(false)
@@ -94,10 +94,7 @@ const onSubmit = () => {
       .then(res => {
         loading.value = false
 
-        ElNotification({
-          message: '登陆成功',
-          type: 'success'
-        })
+        toast('登陆成功')
         setToken(res.token)
         //获取用户信息
         getinfo().then(res => {

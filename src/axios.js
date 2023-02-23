@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { ElNotification } from 'element-plus'
-import { useCookies } from '@vueuse/integrations/useCookies'
 
+import { useCookies } from '@vueuse/integrations/useCookies'
+import { toast } from '~/composables/utils'
 const service = axios.create({
   baseURL: '/api'
 })
@@ -29,11 +29,7 @@ service.interceptors.response.use(
   },
   function (error) {
     const res = error.response.data
-    ElNotification({
-      message: res.msg || '请求失败,请检查网络',
-      type: 'error',
-      duration: 2000
-    })
+    toast(res.msg || '请求失败,请检查网络', 'error')
     return Promise.reject(error)
   }
 )
