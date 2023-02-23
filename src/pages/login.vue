@@ -56,7 +56,7 @@ import { Lock, User } from '@element-plus/icons-vue'
 import { login, getinfo } from '~/api/manager'
 import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { useCookies } from '@vueuse/integrations/useCookies'
+import { setToken } from '~/composables/auth'
 
 const loginFormRef = ref(null)
 const loading = ref(false)
@@ -98,8 +98,7 @@ const onSubmit = () => {
           message: '登陆成功',
           type: 'success'
         })
-        const cookie = useCookies()
-        cookie.set('admin-token', res.token || '')
+        setToken(res.token)
         //获取用户信息
         getinfo().then(res => {
           console.log(res)

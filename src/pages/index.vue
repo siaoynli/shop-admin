@@ -7,17 +7,16 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { useCookies } from '@vueuse/integrations/useCookies'
-const cookie = useCookies()
+import { getToken, clearToken } from '~/composables/auth'
 
 const token = ref('')
 
 function get() {
-  token.value = cookie.get('admin-token')
-  console.log(cookie.get('admin-token'))
+  token.value = getToken('admin-token')
+  console.log(getToken('admin-token'))
 }
 
 function clear() {
-  cookie.remove('admin-token')
+  clearToken('admin-token')
 }
 </script>
