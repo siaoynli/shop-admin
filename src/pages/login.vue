@@ -57,6 +57,9 @@ import { login, getinfo } from '~/api/manager'
 import { useRouter } from 'vue-router'
 import { setToken } from '~/composables/auth'
 import { toast } from '~/composables/utils'
+import { useUserStore } from '~/stores/user'
+// access the `store` variable anywhere in the component ✨
+const store = useUserStore()
 
 const loginFormRef = ref(null)
 const loading = ref(false)
@@ -98,7 +101,7 @@ const onSubmit = () => {
         setToken(res.token)
         //获取用户信息
         getinfo().then(res => {
-          console.log(res)
+          store.setUserInfo(res)
         })
         router.push('/')
       })

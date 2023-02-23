@@ -4,11 +4,11 @@ module.exports = {
     { value: 'feat', name: '✨ feat:  新功能' },
     { value: 'fix', name: '🐛 fix:  修复bug' },
     { value: 'docs', name: '📖 docs:  文档变更' },
+    { value: 'style', name: '💄 style:  代码的样式美化' },
     {
       value: 'refactor',
-      name: '🔁 refactor:  重构代码'
+      name: '🔁 refactor:  重构(既不是增加feature，也不是修复bug)'
     },
-    { value: 'style', name: '💄 style:  代码的样式美化' },
     { value: 'perf', name: '⚡️ perf:  性能优化' },
     { value: 'test', name: '✅ test:  增加测试' },
     { value: 'chore', name: '🚀 chore:  构建过程或辅助工具的变动' },
@@ -18,10 +18,11 @@ module.exports = {
   ],
 
   scopes: [
-    { name: 'router' },
-    { name: 'page' },
-    { name: 'store' },
-    { name: 'authorize' }
+    { name: '路由' },
+    { name: '页面' },
+    { name: '存储' },
+    { name: '授权' },
+    { name: '文档' }
   ],
   allowCustomScopes: true,
   // 消息步骤
