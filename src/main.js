@@ -4,11 +4,11 @@ import 'element-plus/dist/index.css'
 import 'virtual:windi.css'
 import router from './router'
 import App from './App.vue'
-import { createPinia } from 'pinia'
+import store from './store'
 
 const app = createApp(App)
-const pinia = createPinia()
-app.use(pinia)
+
+app.use(store)
 app.use(ElementPlus)
 app.use(router)
 
