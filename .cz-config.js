@@ -17,7 +17,12 @@ module.exports = {
     { value: 'ci', name: '🧰 ci:  更改为我们的CI配置文件和脚本' }
   ],
 
-  scopes: [{ name: 'router' }, { name: 'page' }, { name: 'auth' }],
+  scopes: [
+    { name: 'router' },
+    { name: 'page' },
+    { name: 'store' },
+    { name: 'authorize' }
+  ],
   allowCustomScopes: true,
   // 消息步骤
   messages: {
