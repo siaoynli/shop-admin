@@ -7,7 +7,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import { getToken, clearToken } from '~/composables/auth'
+import { getToken, removeToken } from '~/composables/auth'
 
 const token = ref('')
 
@@ -17,6 +17,6 @@ function get() {
 }
 
 function clear() {
-  clearToken('admin-token')
+  removeToken('admin-token')
 }
 </script>
