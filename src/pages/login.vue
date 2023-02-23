@@ -40,6 +40,7 @@
             class="w-[250px]"
             round
             color="#626aef"
+            :loading="loading"
             @click="onSubmit"
             >登陆</el-button
           >
@@ -52,13 +53,14 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { Lock, User } from '@element-plus/icons-vue'
-import { login } from '~/api/manager'
+import { login, getinfo } from '~/api/manager'
 import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
-const loginFormRef = ref(null)
-const router = useRouter()
-
 import { useCookies } from '@vueuse/integrations/useCookies'
+
+const loginFormRef = ref(null)
+const loading = ref(false)
+const router = useRouter()
 
 const form = reactive({
   username: 'admin',
@@ -87,24 +89,25 @@ const onSubmit = () => {
     if (!valid) {
       return false
     }
+    loading.value = true
     login(form.username, form.password)
       .then(res => {
-        console.log(res.data)
+        loading.value = false
+
         ElNotification({
           message: '登陆成功',
           type: 'success'
         })
         const cookie = useCookies()
-
-        cookie.set('admin-token', res.data.data.token || '')
+        cookie.set('admin-token', res.token || '')
+        //获取用户信息
+        getinfo().then(res => {
+          console.log(res)
+        })
         router.push('/')
       })
-      .catch(err => {
-        ElNotification({
-          message: err.response.data.msg || '请求失败',
-          type: 'error',
-          duration: 2000
-        })
+      .finally(() => {
+        loading.value = false
       })
   })
 }
