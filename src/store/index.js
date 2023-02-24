@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
-import { login } from '~/api/manager'
+import { login, logout } from '~/api/manager'
 import { getinfo } from '~/api/manager'
-import { setToken } from '~/composables/auth'
+import { setToken, removeToken } from '~/composables/auth'
 const store = createStore({
   state() {
     return {
@@ -33,6 +33,19 @@ const store = createStore({
             resolve(res)
           })
           .catch(err => reject(err))
+      })
+    },
+    logout({ commit }) {
+      return new Promise((resolve, reject) => {
+        logout()
+          .then(res => {
+            resolve(res)
+          })
+          .catch(err => reject(err))
+          .finally(() => {
+            removeToken()
+            commit('SET_USERINFO', {})
+          })
       })
     }
   }
