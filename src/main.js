@@ -12,4 +12,6 @@ app.use(store)
 app.use(ElementPlus)
 app.use(router)
 
+import './permission'
+
 app.mount('#app')
