@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { Lock, User } from '@element-plus/icons-vue'
 
 import { useRouter } from 'vue-router'
@@ -105,6 +105,22 @@ const onSubmit = () => {
       })
   })
 }
+// 监听回车事件方法
+const onKeyUp = e => {
+  if (e.keyCode == 13) {
+    onSubmit()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keyup', onKeyUp)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keyup', onKeyUp)
+})
+
+//监听键盘事件
 </script>
 
 <style scoped>
