@@ -1,4 +1,5 @@
 import { ElNotification, ElMessageBox } from 'element-plus'
+import nProgress from 'nprogress'
 
 export function toast(msg, type = 'success', dangerouslyUseHTMLString = false) {
   ElNotification({
@@ -20,4 +21,12 @@ export function showModal(
     confirmButtonText: '确定',
     cancelButtonText: '取消'
   })
+}
+
+export function showFullLoading() {
+  nProgress.start()
+}
+
+export function hideFullLoading() {
+  nProgress.done()
 }
