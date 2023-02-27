@@ -3,11 +3,19 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    component: () => import('~/pages/index.vue'),
-    name: 'index',
-    meta: {
-      title: '后台首页'
-    }
+    component: () => import('~/layouts/admin.vue'),
+    name: 'admin',
+    //子路由
+    children: [
+      {
+        path: '/',
+        component: () => import('~/pages/index.vue'),
+        name: 'index',
+        meta: {
+          title: '仪表盘'
+        }
+      }
+    ]
   },
   {
     path: '/login',
