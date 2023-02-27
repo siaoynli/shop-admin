@@ -124,7 +124,7 @@ onBeforeUnmount(() => {
 //监听键盘事件
 </script>
 
-<style scoped>
+<style scoped lang="postcss">
 .login-container {
   @apply bg-indigo-500 min-h-screen;
 }
