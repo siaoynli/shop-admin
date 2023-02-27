@@ -6,24 +6,10 @@
     </span>
     <el-icon class="icon-btn"><Fold /></el-icon>
     <el-icon class="icon-btn"><Refresh /></el-icon>
-    <el-dropdown>
-      <el-button type="primary">
-        Dropdown List<el-icon class="el-icon--right"><arrow-down /></el-icon>
-      </el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item>Action 1</el-dropdown-item>
-          <el-dropdown-item>Action 2</el-dropdown-item>
-          <el-dropdown-item>Action 3</el-dropdown-item>
-          <el-dropdown-item>Action 4</el-dropdown-item>
-          <el-dropdown-item>Action 5</el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
 
     <div class="ml-auto flex items-center mr-2">
       <el-icon class="icon-btn"><FullScreen /></el-icon>
-      <el-dropdown class="dropdown">
+      <el-dropdown class="dropdown" trigger="click">
         <span class="flex items-center">
           <el-avatar
             class="avatar"
@@ -37,8 +23,10 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>修改密码</el-dropdown-item>
-            <el-dropdown-item @click="logout">退出登陆</el-dropdown-item>
+            <el-dropdown-item :icon="Lock">修改密码</el-dropdown-item>
+            <el-dropdown-item :icon="ArrowLeft" @click="logout"
+              >退出登陆</el-dropdown-item
+            >
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -51,7 +39,9 @@ import {
   Fold,
   Refresh,
   FullScreen,
-  ArrowDown
+  ArrowDown,
+  Lock,
+  ArrowLeft
 } from '@element-plus/icons-vue'
 import { showModal, toast } from '~/composables/utils'
 import { useStore } from 'vuex'
