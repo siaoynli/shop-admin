@@ -5,11 +5,22 @@
       杭州网后台管理系统
     </span>
     <el-icon class="icon-btn"><Fold /></el-icon>
-    <el-icon class="icon-btn"><Refresh /></el-icon>
+    <el-tooltip effect="dark" content="刷新" placement="bottom">
+      <el-icon class="icon-btn" @click="handleRefresh"><Refresh /></el-icon>
+    </el-tooltip>
 
     <div class="ml-auto flex items-center mr-2">
-      <el-icon class="icon-btn"><FullScreen /></el-icon>
-      <el-dropdown class="dropdown" trigger="click">
+      <el-tooltip
+        effect="dark"
+        :content="isFullscreen ? '退出全屏' : '全屏'"
+        placement="bottom"
+      >
+        <el-icon class="icon-btn" @click="toggle">
+          <Aim v-if="isFullscreen" />
+          <FullScreen v-else />
+        </el-icon>
+      </el-tooltip>
+      <el-dropdown class="dropdown" trigger="click" @command="handleCommand">
         <span class="flex items-center">
           <el-avatar
             class="avatar"
@@ -23,8 +34,10 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item :icon="Lock">修改密码</el-dropdown-item>
-            <el-dropdown-item :icon="ArrowLeft" @click="logout"
+            <el-dropdown-item :icon="Lock" command="rePassword"
+              >修改密码</el-dropdown-item
+            >
+            <el-dropdown-item :icon="ArrowLeft" command="logout"
               >退出登陆</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -41,14 +54,29 @@ import {
   FullScreen,
   ArrowDown,
   Lock,
-  ArrowLeft
+  ArrowLeft,
+  Aim
 } from '@element-plus/icons-vue'
 import { showModal, toast } from '~/composables/utils'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useFullscreen } from '@vueuse/core'
 const router = useRouter()
 const store = useStore()
-function logout() {
+
+const handleCommand = c => {
+  switch (c) {
+    case 'logout':
+      logout()
+      break
+
+    default:
+      console.log('修改密码')
+      break
+  }
+}
+
+const logout = () =>
   showModal('您确认要退出系统吗?')
     .then(() => {
       store
@@ -61,7 +89,10 @@ function logout() {
         })
     })
     .catch(() => {})
-}
+
+const handleRefresh = () => location.reload()
+
+const { isFullscreen, toggle } = useFullscreen()
 </script>
 
 <style scoped>
@@ -88,11 +119,11 @@ function logout() {
 .f-header .dropdown {
   height: 64px;
   cursor: pointer;
-  @apply flex justify-center items-center text-light-50;
+  @apply flex justify-center items-center text-light-50 mx-5;
 }
 
 .el-dropdown-link {
-  @apply flex justify-center items-center mx-5;
+  @apply flex justify-center items-center;
 }
 
 .avatar {
