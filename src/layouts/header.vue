@@ -45,6 +45,40 @@
       </el-dropdown>
     </div>
   </div>
+
+  <form-drawer
+    ref="formDrawerRef"
+    title="修改密码"
+    destroy-on-close
+    @submit="onSubmit"
+  >
+    <el-form
+      ref="passwordFormRef"
+      :model="form"
+      :rules="rules"
+      label-width="150px"
+    >
+      <el-form-item prop="oldpassword" label="旧密码">
+        <el-input v-model="form.oldpassword" placeholder="请输入旧密码" />
+      </el-form-item>
+      <el-form-item prop="password" label="新密码">
+        <el-input
+          v-model="form.password"
+          placeholder="请输入新密码"
+          type="password"
+          show-password
+        />
+      </el-form-item>
+      <el-form-item prop="repassword" label="确认新密码">
+        <el-input
+          v-model="form.repassword"
+          placeholder="请确认新密码"
+          type="password"
+          show-password
+        />
+      </el-form-item>
+    </el-form>
+  </form-drawer>
 </template>
 <script setup>
 import {
@@ -61,8 +95,47 @@ import { showModal, toast } from '~/composables/utils'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useFullscreen } from '@vueuse/core'
+import { ref, reactive } from 'vue'
+import { updatePassword } from '~/api/manager'
+
+import FormDrawer from '~/components/from-drawer.vue'
+
 const router = useRouter()
 const store = useStore()
+
+const form = reactive({
+  oldpassword: '',
+  password: '',
+  repassword: ''
+})
+const passwordFormRef = ref(null)
+
+const rules = {
+  oldpassword: [
+    {
+      required: true,
+      message: '请输入旧密码',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入新密码',
+      trigger: 'blur'
+    }
+  ],
+  repassword: [
+    {
+      required: true,
+      message: '请确认新密码',
+      trigger: 'blur'
+    }
+  ]
+}
+
+const formDrawerRef = ref(null)
+// 修改密码
 
 const handleCommand = c => {
   switch (c) {
@@ -71,7 +144,7 @@ const handleCommand = c => {
       break
 
     default:
-      console.log('修改密码')
+      formDrawerRef.value.open()
       break
   }
 }
@@ -93,6 +166,24 @@ const logout = () =>
 const handleRefresh = () => location.reload()
 
 const { isFullscreen, toggle } = useFullscreen()
+
+const onSubmit = () => {
+  passwordFormRef.value.validate(valid => {
+    if (!valid) {
+      return false
+    }
+    formDrawerRef.value.showLoading()
+    updatePassword(form)
+      .then(() => {
+        toast('修改密码成功，请重新登陆')
+        store.dispatch('logout')
+        router.push('/')
+      })
+      .finally(() => {
+        formDrawerRef.value.hideLoading()
+      })
+  })
+}
 </script>
 
 <style scoped lang="postcss">

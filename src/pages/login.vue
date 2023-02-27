@@ -57,14 +57,13 @@ import { Lock, User } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 
 import { toast } from '~/composables/utils'
-import { useStore } from 'vuex'
+import store from '~/store'
 
 // access the `store` variable anywhere in the component ✨
 
 const loginFormRef = ref(null)
 const loading = ref(false)
 const router = useRouter()
-const store = useStore()
 
 const form = reactive({
   username: 'admin',
