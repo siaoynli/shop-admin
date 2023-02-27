@@ -34,7 +34,7 @@ const emit = defineEmits(['submit'])
 //通知外部组件submit事件
 const handleSubmit = () => emit('submit')
 
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     default: ''
