@@ -1,6 +1,13 @@
 <template lang="">
-  <div class="f-menu">
-    <el-menu default-active="2" class="border-0" @select="handleSelect">
+  <div class="f-menu" :style="{ width: $store.state.asideWidth }">
+    <el-menu
+      unique-opened
+      default-active="2"
+      class="border-0"
+      :collapse-transition="false"
+      :collapse="isCollapse"
+      @select="handleSelect"
+    >
       <template v-for="(item, index) in asideMenus" :key="index">
         <el-sub-menu v-if="item.child && item.child.length" :index="item.name">
           <template #title>
@@ -27,6 +34,12 @@
 </template>
 <script setup>
 import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+const isCollapse = computed(() => !(store.state.asideWidth == '250px'))
 const router = useRouter()
 const asideMenus = [
   {
@@ -69,11 +82,12 @@ const handleSelect = e => {
 
 <style scoped lang="postcss">
 .f-menu {
-  width: 250px;
   top: 64px;
   bottom: 0;
   left: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 20ms;
   @apply shadow-md fixed bg-light-50;
 }
 </style>

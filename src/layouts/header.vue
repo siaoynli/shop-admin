@@ -4,7 +4,10 @@
       <el-icon class="mr-1 text-2xl"><ChromeFilled /></el-icon>
       杭州网后台管理系统
     </span>
-    <el-icon class="icon-btn"><Fold /></el-icon>
+    <el-icon class="icon-btn" @click="$store.commit('handleAsideWidth')">
+      <Fold v-if="$store.state.asideWidth == '250px'" />
+      <Expand v-else />
+    </el-icon>
     <el-tooltip effect="dark" content="刷新" placement="bottom">
       <el-icon class="icon-btn" @click="handleRefresh"><Refresh /></el-icon>
     </el-tooltip>
@@ -81,16 +84,16 @@
   </form-drawer>
 </template>
 <script setup>
-// import {
-//   ChromeFilled,
-//   Fold,
-//   Refresh,
-//   FullScreen,
-//   ArrowDown,
-//   Lock,
-//   ArrowLeft,
-//   Aim
-// } from '@element-plus/icons-vue'
+import {
+  ChromeFilled,
+  Fold,
+  Refresh,
+  FullScreen,
+  ArrowDown,
+  Lock,
+  ArrowLeft,
+  Aim
+} from '@element-plus/icons-vue'
 import { useFullscreen } from '@vueuse/core'
 import FormDrawer from '~/components/from-drawer.vue'
 import { useRePassword, useLogout } from '~/composables/useManager'

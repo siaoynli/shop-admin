@@ -4,7 +4,7 @@
       <f-header></f-header>
     </el-header>
     <el-container>
-      <el-aside> <f-menu></f-menu></el-aside>
+      <el-aside :width="$store.state.asideWidth"> <f-menu></f-menu></el-aside>
       <el-main>
         <tag-list></tag-list>
         <router-view></router-view>
@@ -17,3 +17,9 @@ import FHeader from './header.vue'
 import FMenu from './menu.vue'
 import TagList from './taglist.vue'
 </script>
+
+<style scoped lang="postcss">
+.el-aside {
+  transition: all 2ms;
+}
+</style>

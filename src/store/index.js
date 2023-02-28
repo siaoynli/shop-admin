@@ -5,12 +5,19 @@ import { setToken, removeToken } from '~/composables/auth'
 const store = createStore({
   state() {
     return {
-      user: {}
+      //用户信息
+      user: {},
+      // 侧边宽度
+      asideWidth: '250px'
     }
   },
   mutations: {
     SET_USERINFO(state, user) {
       state.user = user
+    },
+    // 展开或者收缩侧边
+    handleAsideWidth(state) {
+      state.asideWidth = state.asideWidth == '250px' ? '60px' : '250px'
     }
   },
   actions: {
