@@ -91,52 +91,20 @@ import {
   ArrowLeft,
   Aim
 } from '@element-plus/icons-vue'
-import { showModal, toast } from '~/composables/utils'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
 import { useFullscreen } from '@vueuse/core'
-import { ref, reactive } from 'vue'
-import { updatePassword } from '~/api/manager'
-
 import FormDrawer from '~/components/from-drawer.vue'
+import { useRePassword, useLogout } from '~/composables/useManager'
 
-const router = useRouter()
-const store = useStore()
-
-const form = reactive({
-  oldpassword: '',
-  password: '',
-  repassword: ''
-})
-const passwordFormRef = ref(null)
-
-const rules = {
-  oldpassword: [
-    {
-      required: true,
-      message: '请输入旧密码',
-      trigger: 'blur'
-    }
-  ],
-  password: [
-    {
-      required: true,
-      message: '请输入新密码',
-      trigger: 'blur'
-    }
-  ],
-  repassword: [
-    {
-      required: true,
-      message: '请确认新密码',
-      trigger: 'blur'
-    }
-  ]
-}
-
-const formDrawerRef = ref(null)
-// 修改密码
-
+const {
+  form,
+  formDrawerRef,
+  passwordFormRef,
+  rules,
+  openRePasswordForm,
+  onSubmit
+} = useRePassword()
+const { logout } = useLogout()
+const { isFullscreen, toggle } = useFullscreen()
 const handleCommand = c => {
   switch (c) {
     case 'logout':
@@ -144,46 +112,12 @@ const handleCommand = c => {
       break
 
     default:
-      formDrawerRef.value.open()
+      openRePasswordForm()
       break
   }
 }
 
-const logout = () =>
-  showModal('您确认要退出系统吗?')
-    .then(() => {
-      store
-        .dispatch('logout')
-        .then(res => {
-          toast(res)
-        })
-        .finally(() => {
-          router.push('/login')
-        })
-    })
-    .catch(() => {})
-
 const handleRefresh = () => location.reload()
-
-const { isFullscreen, toggle } = useFullscreen()
-
-const onSubmit = () => {
-  passwordFormRef.value.validate(valid => {
-    if (!valid) {
-      return false
-    }
-    formDrawerRef.value.showLoading()
-    updatePassword(form)
-      .then(() => {
-        toast('修改密码成功，请重新登陆')
-        store.dispatch('logout')
-        router.push('/')
-      })
-      .finally(() => {
-        formDrawerRef.value.hideLoading()
-      })
-  })
-}
 </script>
 
 <style scoped lang="postcss">
