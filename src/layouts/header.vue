@@ -81,16 +81,16 @@
   </form-drawer>
 </template>
 <script setup>
-import {
-  ChromeFilled,
-  Fold,
-  Refresh,
-  FullScreen,
-  ArrowDown,
-  Lock,
-  ArrowLeft,
-  Aim
-} from '@element-plus/icons-vue'
+// import {
+//   ChromeFilled,
+//   Fold,
+//   Refresh,
+//   FullScreen,
+//   ArrowDown,
+//   Lock,
+//   ArrowLeft,
+//   Aim
+// } from '@element-plus/icons-vue'
 import { useFullscreen } from '@vueuse/core'
 import FormDrawer from '~/components/from-drawer.vue'
 import { useRePassword, useLogout } from '~/composables/useManager'

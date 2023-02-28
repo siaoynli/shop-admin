@@ -52,7 +52,7 @@
 
 <script setup>
 import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
-import { Lock, User } from '@element-plus/icons-vue'
+// import { Lock, User } from '@element-plus/icons-vue'
 
 import { useRouter } from 'vue-router'
 

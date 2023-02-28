@@ -14,6 +14,14 @@ const routes = [
         meta: {
           title: '仪表盘'
         }
+      },
+      {
+        path: '/goods/list',
+        component: () => import('~/pages/goods/list.vue'),
+        name: 'goodList',
+        meta: {
+          title: '商品管理'
+        }
       }
     ]
   },
