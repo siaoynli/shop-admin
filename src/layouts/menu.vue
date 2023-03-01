@@ -2,10 +2,10 @@
   <div class="f-menu" :style="{ width: $store.state.asideWidth }">
     <el-menu
       unique-opened
-      default-active="2"
       class="border-0"
       :collapse-transition="false"
       :collapse="isCollapse"
+      :default-active="defaultActive"
       @select="handleSelect"
     >
       <template v-for="(item, index) in asideMenus" :key="index">
@@ -33,9 +33,13 @@
   </div>
 </template>
 <script setup>
-import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
+
+const route = useRoute()
+
+const defaultActive = ref(route.path)
 
 const store = useStore()
 
@@ -76,6 +80,7 @@ const handleSelect = e => {
     window.open(e)
     return
   }
+  defaultActive.value = e
   router.push(e)
 }
 </script>
