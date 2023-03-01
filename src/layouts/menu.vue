@@ -38,42 +38,13 @@ import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 
 const route = useRoute()
-
-const defaultActive = ref(route.path)
-
+const router = useRouter()
 const store = useStore()
 
+const defaultActive = ref(route.path)
 const isCollapse = computed(() => !(store.state.asideWidth == '250px'))
-const router = useRouter()
-const asideMenus = [
-  {
-    name: '欢迎使用后台管理系统',
-    icon: 'switch-filled',
-    frontpath: 'http://www.hangzhou.com.cn'
-  },
-  {
-    name: '后台面板',
-    icon: 'help',
-    child: [
-      {
-        name: '主控台',
-        frontpath: '/',
-        icon: 'home-filled'
-      }
-    ]
-  },
-  {
-    name: '商城管理',
-    icon: 'shopping-bag',
-    child: [
-      {
-        name: '商品管理',
-        frontpath: '/goods/list',
-        icon: 'shopping-cart-full'
-      }
-    ]
-  }
-]
+
+const asideMenus = computed(() => store.state.menus)
 
 const handleSelect = e => {
   if (e.indexOf('http') !== -1) {
@@ -95,4 +66,37 @@ const handleSelect = e => {
   transition: all 200ms;
   @apply shadow-md fixed bg-light-50;
 }
+
+.f-menu::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  height: 50px;
+  outline-offset: -2px;
+  outline: 2px solid #fff;
+  -webkit-border-radius: 4px;
+  border: 2px solid #fff;
+}
+
+.f-menu::-webkit-scrollbar-thumb:hover {
+  height: 50px;
+  -webkit-border-radius: 4px;
+  @apply bg-indigo-500;
+}
+
+.f-menu::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.f-menu::-webkit-scrollbar-track-piece {
+  @apply bg-light-100;
+  -webkit-border-radius: 0;
+}
+
+.f-menu::-webkit-scrollbar-thumb:active {
+  height: 50px;
+  @apply bg-indigo-500;
+  -webkit-border-radius: 4px;
+}
+
+/*---滚动条默认显示样式--*/
 </style>
