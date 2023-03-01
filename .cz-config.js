@@ -18,11 +18,11 @@ module.exports = {
   ],
 
   scopes: [
-    { name: '路由' },
-    { name: '页面' },
-    { name: '存储' },
-    { name: '授权' },
-    { name: '文档' }
+    { name: 'router' },
+    { name: 'page' },
+    { name: 'storage' },
+    { name: 'authorize' },
+    { name: 'doc' }
   ],
   allowCustomScopes: true,
   // 消息步骤
