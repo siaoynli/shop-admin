@@ -87,7 +87,7 @@ const handleSelect = e => {
   left: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  transition: all 20ms;
+  transition: all 200ms;
   @apply shadow-md fixed bg-light-50;
 }
 </style>

@@ -4,12 +4,12 @@
 
 <style>
 #nprogress .bar {
-  background-color: blueviolet !important;
+  background-color: #f57eed !important;
   height: 3px;
 }
 
 #nprogress .spinner-icon {
-  border-top-color: blueviolet !important;
-  border-left-color: blueviolet !important;
+  border-top-color: #f57eed !important;
+  border-left-color: #f57eed !important;
 }
 </style>

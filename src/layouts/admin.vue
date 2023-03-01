@@ -20,6 +20,6 @@ import TagList from './taglist.vue'
 
 <style scoped lang="postcss">
 .el-aside {
-  transition: all 2ms;
+  transition: all 200ms;
 }
 </style>
