@@ -3,6 +3,9 @@ import { getToken } from '~/composables/auth'
 import { toast, showFullLoading, hideFullLoading } from '~/composables/utils'
 import store from './store'
 
+//请求两次
+let hasGetInfo = false
+
 router.beforeEach(async (to, from, next) => {
   //显示全局loading
   showFullLoading()
@@ -26,8 +29,9 @@ router.beforeEach(async (to, from, next) => {
   document.title = title
   //动态路由，刷新页面报404
   let hasNewRoutes = false
-  if (token) {
+  if (token && !hasGetInfo) {
     let { menus } = await store.dispatch('getUserInfo')
+    hasGetInfo = true
     //动态添加路由
     hasNewRoutes = addRoutes(menus)
   }

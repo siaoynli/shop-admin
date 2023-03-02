@@ -83,6 +83,6 @@ export function addRoutes(menus) {
     }
   })
 
-  console.log('路由列表:', router.getRoutes())
+  // console.log('路由列表:', router.getRoutes())
   return hasNewRoutes
 }
