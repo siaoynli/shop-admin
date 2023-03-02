@@ -1,4 +1,4 @@
-import router from '~/router'
+import { router, addRoutes } from '~/router'
 import { getToken } from '~/composables/auth'
 import { toast, showFullLoading, hideFullLoading } from '~/composables/utils'
 import store from './store'
@@ -21,15 +21,19 @@ router.beforeEach(async (to, from, next) => {
     return next({ path: from.path ? from.path : '/' })
   }
 
+  //设置页面标题
+  let title = to.meta.title ? to.meta.title + '-杭州网' : 'loading...'
+  document.title = title
+  //动态路由，刷新页面报404
+  let hasNewRoutes = false
   if (token) {
-    await store.dispatch('getUserInfo')
+    let { menus } = await store.dispatch('getUserInfo')
+    //动态添加路由
+    hasNewRoutes = addRoutes(menus)
   }
 
-  //设置页面标题
-
-  let title = (to.meta.title ? to.meta.title : '') + '-杭州网'
-  document.title = title
-  next()
+  // next()
+  hasNewRoutes ? next(to.fullPath) : next()
 })
 
 router.afterEach(() => {

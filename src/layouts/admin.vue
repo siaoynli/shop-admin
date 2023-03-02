@@ -22,4 +22,7 @@ import TagList from './taglist.vue'
 .el-aside {
   transition: all 200ms;
 }
+.el-main {
+  height: calc(100vh - 64px);
+}
 </style>
