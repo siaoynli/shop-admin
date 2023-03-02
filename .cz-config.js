@@ -18,8 +18,8 @@ module.exports = {
   ],
 
   scopes: [
-    { name: 'router' },
     { name: 'page' },
+    { name: 'router' },
     { name: 'storage' },
     { name: 'authorize' },
     { name: 'doc' }
