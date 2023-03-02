@@ -33,7 +33,7 @@
   </div>
 </template>
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 
@@ -54,6 +54,10 @@ const handleSelect = e => {
   defaultActive.value = e
   router.push(e)
 }
+
+onBeforeRouteUpdate(to => {
+  defaultActive.value = to.path
+})
 </script>
 
 <style scoped lang="postcss">
