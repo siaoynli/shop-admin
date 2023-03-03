@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-5">
     <el-row :gutter="20">
       <el-col
         v-for="(item, index) in iconNavs"

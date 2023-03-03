@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20">
       <template v-if="panelsData.length == 0">
-        <el-col v-for="(_, index) in 4" :key="index" :span="6" :offset="0">
+        <el-col v-for="o in 4" :key="o" :span="6" :offset="0">
           <el-skeleton style="width: 100%" animated loading>
             <template #template>
               <el-card shadow="hover" class="border-0">
@@ -49,15 +49,20 @@
       </el-col>
     </el-row>
 
-    <div class="mt-5">
-      <index-nav></index-nav>
-    </div>
+    <index-nav></index-nav>
+
+    <el-row :gutter="20" class="mt-5">
+      <el-col :span="12" :offset="0">
+        <index-chart></index-chart>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
 import CountTo from '~/components/count-to.vue'
 import IndexNav from '~/components/index-nav.vue'
+import IndexChart from '~/components/index-chart.vue'
 import { getStatistics1 } from '~/api/index'
 const panelsData = ref([])
 getStatistics1().then(({ panels }) => {
