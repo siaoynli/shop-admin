@@ -45,6 +45,62 @@ const asyncRoutes = [
     meta: {
       title: '分类管理'
     }
+  },
+  {
+    path: '/user/list',
+    component: () => import('~/pages/user/list.vue'),
+    name: '/user/list',
+    meta: {
+      title: '用户管理'
+    }
+  },
+  {
+    path: '/order/list',
+    component: () => import('~/pages/order/list.vue'),
+    name: '/order/list',
+    meta: {
+      title: '订单管理'
+    }
+  },
+  {
+    path: '/comment/list',
+    component: () => import('~/pages/comment/list.vue'),
+    name: '/comment/list',
+    meta: {
+      title: '评价管理'
+    }
+  },
+  {
+    path: '/image/list',
+    component: () => import('~/pages/image/list.vue'),
+    name: '/image/list',
+    meta: {
+      title: '图库管理'
+    }
+  },
+  {
+    path: '/notice/list',
+    component: () => import('~/pages/notice/list.vue'),
+    name: '/notice/list',
+    meta: {
+      title: '公告管理'
+    }
+  },
+  {
+    path: '/coupon/list',
+    component: () => import('~/pages/coupon/list.vue'),
+    name: '/coupon/list',
+    meta: {
+      title: '优惠券管理'
+    }
+  },
+  {
+    path: '/setting/base',
+    component: () => import('~/pages/setting/base.vue'),
+    name: '/setting/base',
+    meta: {
+      title: '系统配置'
+    }
   }
 ]
 
