@@ -17,7 +17,7 @@
         </div>
       </template>
 
-      <div id="chart" ref="el" style="width: 100%; height: 300px"></div>
+      <div ref="el" style="width: 100%; height: 300px"></div>
     </el-card>
   </div>
 </template>
