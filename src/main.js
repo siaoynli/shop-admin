@@ -6,7 +6,7 @@ import { router } from './router'
 import App from './App.vue'
 import store from './store'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import CKEditor from '@ckeditor/ckeditor5-vue'
+import permission from '~/directives/permission'
 
 //全局引入图标
 const app = createApp(App)
@@ -17,7 +17,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(store)
 app.use(ElementPlus)
 app.use(router)
-app.use(CKEditor)
+app.use(permission)
 
 import './permission'
 import 'nprogress/nprogress.css'

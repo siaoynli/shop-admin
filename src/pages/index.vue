@@ -53,7 +53,7 @@
 
     <el-row :gutter="20" class="mt-5">
       <el-col :span="12" :offset="0">
-        <index-chart></index-chart>
+        <index-chart v-permission="['getStatistics2,GET']"></index-chart>
       </el-col>
       <el-col :span="12" :offset="0">
         <IndexCard

@@ -73,8 +73,10 @@ let option = {
 onMounted(() => {
   // const chartDom = document.getElementById('chart')
   const chartDom = el.value
-  myChart = echarts.init(chartDom)
-  getData()
+  if (chartDom) {
+    myChart = echarts.init(chartDom)
+    getData()
+  }
 })
 
 // 销毁 echarts，否则在此渲染会出现白屏

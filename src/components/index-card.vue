@@ -3,7 +3,7 @@
     <el-card shadow="never">
       <template #header>
         <div class="flex justify-between">
-          <span class="text-sm">{{ title }}</span>
+          <span>{{ title }}</span>
           <el-tag type="danger" effect="plain">{{ tips }}</el-tag>
         </div>
       </template>
