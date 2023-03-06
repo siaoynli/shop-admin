@@ -56,12 +56,16 @@
         <index-chart></index-chart>
       </el-col>
       <el-col :span="12" :offset="0">
-        <IndexCard title="店铺及商品提示" tips="店铺及商品提示" :btns="goods" />
+        <IndexCard
+          title="店铺及商品提示"
+          tips="店铺及商品提示"
+          :buttons="goods"
+        />
         <IndexCard
           title="交易提示"
           tips="需要立即处理的交易订单"
           class="mt-5"
-          :btns="orders"
+          :buttons="orders"
         />
       </el-col>
     </el-row>

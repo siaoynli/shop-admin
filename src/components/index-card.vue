@@ -10,7 +10,7 @@
 
       <el-row :gutter="20">
         <el-col
-          v-for="(item, index) in btns"
+          v-for="(item, index) in buttons"
           :key="index"
           :span="6"
           :offset="0"
@@ -37,7 +37,7 @@ defineProps({
     default: ''
   },
   tips: { type: String, default: '' },
-  btns: {
+  buttons: {
     type: Array,
     default: () => []
   }
