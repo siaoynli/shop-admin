@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="20">
+    <el-row v-permission="['getStatistics1,GET']" :gutter="20">
       <template v-if="panelsData.length == 0">
         <el-col v-for="o in 4" :key="o" :span="6" :offset="0">
           <el-skeleton style="width: 100%" animated loading>
@@ -52,10 +52,10 @@
     <index-nav></index-nav>
 
     <el-row :gutter="20" class="mt-5">
-      <el-col :span="12" :offset="0">
-        <index-chart v-permission="['getStatistics2,GET']"></index-chart>
+      <el-col v-permission="['getStatistics2,GET']" :span="12" :offset="0">
+        <index-chart></index-chart>
       </el-col>
-      <el-col :span="12" :offset="0">
+      <el-col v-permission="['getStatistics3,GET']" :span="12" :offset="0">
         <IndexCard
           title="店铺及商品提示"
           tips="店铺及商品提示"
