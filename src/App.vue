@@ -16,34 +16,26 @@ body {
   border-left-color: #f57eed !important;
 }
 
-*::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  height: 50px;
-  outline-offset: -2px;
-  outline: 2px solid #fff;
-  -webkit-border-radius: 4px;
-  border: 2px solid #fff;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  height: 50px;
-  -webkit-border-radius: 4px;
-  @apply bg-indigo-500;
-}
-
-*::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
+  height: 6px;
 }
 
-*::-webkit-scrollbar-track-piece {
-  @apply bg-light-100;
-  -webkit-border-radius: 0;
+/* 滚动条 */
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border: 2px #fff solid;
 }
 
-*::-webkit-scrollbar-thumb:active {
-  height: 50px;
+::-webkit-scrollbar-thumb:hover {
   @apply bg-indigo-500;
-  -webkit-border-radius: 4px;
+}
+/* 轨道 */
+::-webkit-scrollbar-track {
+  border-right-color: transparent;
+  border-left-color: transparent;
+  /* @apply bg-gray-100; */
 }
 </style>

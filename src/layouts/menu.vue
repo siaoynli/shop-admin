@@ -70,37 +70,4 @@ onBeforeRouteUpdate(to => {
   transition: all 200ms;
   @apply shadow-md fixed bg-light-50;
 }
-
-.f-menu::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  height: 50px;
-  outline-offset: -2px;
-  outline: 2px solid #fff;
-  -webkit-border-radius: 4px;
-  border: 2px solid #fff;
-}
-
-.f-menu::-webkit-scrollbar-thumb:hover {
-  height: 50px;
-  -webkit-border-radius: 4px;
-  @apply bg-indigo-500;
-}
-
-.f-menu::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.f-menu::-webkit-scrollbar-track-piece {
-  @apply bg-light-100;
-  -webkit-border-radius: 0;
-}
-
-.f-menu::-webkit-scrollbar-thumb:active {
-  height: 50px;
-  @apply bg-indigo-500;
-  -webkit-border-radius: 4px;
-}
-
-/*---滚动条默认显示样式--*/
 </style>
