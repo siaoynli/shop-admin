@@ -11,7 +11,14 @@
         {{ item.name }}
       </aside-list>
     </div>
-    <div class="bottom"></div>
+    <div class="bottom">
+      <el-pagination
+        background
+        layout="prev, next"
+        :total="totalCount"
+        @current-change="getData"
+      />
+    </div>
   </el-aside>
 </template>
 
@@ -21,15 +28,20 @@ import { getImageClassList } from '~/api/image'
 import AsideList from '~/components/aside-list.vue'
 
 const loading = ref(false)
-const page = ref(1)
+
 const imageClasses = ref([])
 const activeId = ref(0)
 
-function getData() {
+const page = ref(1)
+const totalCount = ref(0)
+
+const getData = (p = 1) => {
+  page.value = p
   loading.value = true
   getImageClassList(page.value)
     .then(res => {
       imageClasses.value = res.list
+      totalCount.value = res.totalCount
       activeId.value = imageClasses.value[0] ? imageClasses.value[0].id : 0
     })
     .finally(() => {
@@ -38,6 +50,7 @@ function getData() {
 }
 
 getData()
+
 const handleEdit = () => {
   console.log('handleEdit')
 }
