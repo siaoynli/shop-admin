@@ -1,11 +1,26 @@
 <template>
   <el-aside width="220px" class="image-aside">
     <div class="top">
-      <div v-for="i in 100" :key="i">{{ i }}</div>
+      <aside-list active @edit="handleEdit" @delete="handleDelete">
+        标题1
+      </aside-list>
+      <aside-list @edit="handleEdit" @delete="handleDelete"> 标题2 </aside-list>
     </div>
     <div class="bottom"></div>
   </el-aside>
 </template>
+
+<script setup>
+import AsideList from '~/components/aside-list.vue'
+
+const handleEdit = () => {
+  console.log('handleEdit')
+}
+
+const handleDelete = () => {
+  console.log('handleDelete')
+}
+</script>
 
 <style scoped lang="postcss">
 .image-aside {
