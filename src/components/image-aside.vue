@@ -1,18 +1,43 @@
 <template>
-  <el-aside width="220px" class="image-aside">
+  <el-aside v-loading="loading" width="220px" class="image-aside">
     <div class="top">
-      <aside-list active @edit="handleEdit" @delete="handleDelete">
-        标题1
+      <aside-list
+        v-for="(item, index) in imageClasses"
+        :key="index"
+        :active="activeId == item.id"
+        @edit="handleEdit"
+        @delete="handleDelete"
+      >
+        {{ item.name }}
       </aside-list>
-      <aside-list @edit="handleEdit" @delete="handleDelete"> 标题2 </aside-list>
     </div>
     <div class="bottom"></div>
   </el-aside>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { getImageClassList } from '~/api/image'
 import AsideList from '~/components/aside-list.vue'
 
+const loading = ref(false)
+const page = ref(1)
+const imageClasses = ref([])
+const activeId = ref(0)
+
+function getData() {
+  loading.value = true
+  getImageClassList(page.value)
+    .then(res => {
+      imageClasses.value = res.list
+      activeId.value = imageClasses.value[0] ? imageClasses.value[0].id : 0
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+getData()
 const handleEdit = () => {
   console.log('handleEdit')
 }
