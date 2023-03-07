@@ -15,7 +15,7 @@
 
                 <el-row :gutter="20">
                   <el-col v-for="o in 4" :key="o" :span="6" :offset="0">
-                    <el-card class="bg-gray-100 border-0 py-5">
+                    <el-card class="border-0 py-5">
                       <div
                         class="flex flex-col justify-center items-center cursor-pointer"
                       >

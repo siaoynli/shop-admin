@@ -13,3 +13,7 @@ export function setToken(token) {
 export function removeToken() {
   cookie.remove(TokenKey)
 }
+
+export function removeTab() {
+  cookie.remove('tabList')
+}
