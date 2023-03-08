@@ -5,8 +5,8 @@
         v-for="(item, index) in imageClasses"
         :key="index"
         :active="activeId == item.id"
-        @edit="handleEdit"
-        @delete="handleDelete"
+        @edit="handleEdit(item)"
+        @delete="handleDelete(item.id)"
       >
         {{ item.name }}
       </aside-list>
@@ -21,7 +21,7 @@
     </div>
   </el-aside>
 
-  <form-drawer ref="formDrawerRef" title="新增" @submit="handleSubmit">
+  <form-drawer ref="formDrawerRef" :title="drawerTitle" @submit="handleSubmit">
     <el-form
       ref="formRef"
       :model="form"
@@ -33,30 +33,36 @@
         <el-input v-model="form.name" placeholder="" />
       </el-form-item>
       <el-form-item prop="order" label="排序">
-        <el-input-number v-model="form.order" :min="1" :max="1000" />
+        <el-input-number v-model="form.order" :min="1" :max="10000" />
       </el-form-item>
     </el-form>
   </form-drawer>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { getImageClassList } from '~/api/image'
+import { ref, reactive, computed } from 'vue'
+import {
+  getImageClassList,
+  createImageClass,
+  updateImageClass,
+  deleteImageClass
+} from '~/api/image'
 import AsideList from '~/components/aside-list.vue'
 import FormDrawer from './form-drawer.vue'
+import { toast, showModal } from '~/composables/utils'
 
 const loading = ref(false)
 
 const imageClasses = ref([])
 const activeId = ref(0)
 
-const page = ref(1)
+const current_page = ref(1)
 const totalCount = ref(0)
 
 const getData = (p = 1) => {
-  page.value = p
+  current_page.value = p
   loading.value = true
-  getImageClassList(page.value)
+  getImageClassList(current_page.value)
     .then(res => {
       imageClasses.value = res.list
       totalCount.value = res.totalCount
@@ -69,14 +75,14 @@ const getData = (p = 1) => {
 
 getData()
 
+const editId = ref(0)
+const drawerTitle = computed(() => (editId.value == 0 ? '新增' : '编辑'))
 const formDrawerRef = ref(null)
-
-const handleCreate = () => formDrawerRef.value.open()
-
 const form = reactive({
   name: '',
-  order: 50
+  order: 1
 })
+
 const formRef = ref(null)
 
 const rules = {
@@ -102,24 +108,50 @@ const handleSubmit = () => {
       return false
     }
     formDrawerRef.value.showLoading()
-    // updatePassword(form)
-    //   .then(() => {
-    //     toast('修改密码成功，请重新登陆')
-    //     store.dispatch('logout')
-    //     router.push('/')
-    //   })
-    //   .finally(() => {
-    //     formDrawerRef.value.hideLoading()
-    //   })
+
+    const requestFunc =
+      editId.value == 0
+        ? createImageClass(form)
+        : updateImageClass(editId.value, form)
+    requestFunc
+      .then(() => {
+        toast('操作成功')
+        //重新加载数据
+        getData(editId.value ? current_page.value : 1)
+        formDrawerRef.value.close()
+      })
+      .finally(() => {
+        formDrawerRef.value.hideLoading()
+      })
   })
 }
 
-const handleEdit = () => {
-  console.log('handleEdit')
+const handleCreate = () => {
+  editId.value = 0
+
+  form.name = ''
+  form.order = imageClasses.value[0] ? imageClasses.value[0].order : 1
+  formDrawerRef.value.open()
 }
 
-const handleDelete = () => {
-  console.log('handleDelete')
+const handleEdit = item => {
+  formDrawerRef.value.open()
+
+  form.name = item.name
+  form.order = item.order
+  editId.value = item.id
+}
+
+const handleDelete = e => {
+  showModal('您确认要删除这条记录吗?')
+    .then(() => {
+      deleteImageClass(e).then(() => {
+        toast('操作成功')
+        //重新加载数据
+        getData()
+      })
+    })
+    .catch(() => {})
 }
 
 defineExpose({
