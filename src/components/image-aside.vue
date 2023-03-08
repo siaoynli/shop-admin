@@ -7,6 +7,7 @@
         :active="activeId == item.id"
         @edit="handleEdit(item)"
         @delete="handleDelete(item.id)"
+        @click="handleChangeActiveId(item.id)"
       >
         {{ item.name }}
       </aside-list>
@@ -40,26 +41,130 @@
 </template>
 
 <script setup>
+import { ref, reactive, computed } from 'vue'
+import { toast } from '~/composables/utils'
 import AsideList from '~/components/aside-list.vue'
 import FormDrawer from './form-drawer.vue'
 
-import { useImageSide } from '~/hooks/useImageSide.js'
+import {
+  getImageClassList,
+  createImageClass,
+  updateImageClass,
+  deleteImageClass
+} from '~/api/image'
 
-const {
-  loading,
-  imageClasses,
-  activeId,
-  totalCount,
-  drawerTitle,
-  formDrawerRef,
-  form,
-  formRef,
-  rules,
-  handleSubmit,
-  handleCreate,
-  handleEdit,
-  handleDelete
-} = useImageSide()
+const loading = ref(false)
+
+const imageClasses = ref([])
+const activeId = ref(0)
+
+const current_page = ref(1)
+const totalCount = ref(0)
+
+const editId = ref(0)
+const drawerTitle = computed(() => (editId.value == 0 ? '新增' : '编辑'))
+const formDrawerRef = ref(null)
+const form = reactive({
+  name: '',
+  order: 1
+})
+
+const formRef = ref(null)
+
+const rules = {
+  name: [
+    {
+      required: true,
+      message: '请输入分类标题',
+      trigger: 'blur'
+    }
+  ],
+  order: [
+    {
+      required: true,
+      message: '请选择排序',
+      trigger: 'blur'
+    }
+  ]
+}
+
+const handleCreate = () => {
+  editId.value = 0
+  form.name = ''
+  form.order = imageClasses.value[0] ? imageClasses.value[0].order : 1
+  formDrawerRef.value.open()
+}
+
+const handleEdit = item => {
+  formDrawerRef.value.open()
+
+  form.name = item.name
+  form.order = item.order
+  editId.value = item.id
+}
+
+const emit = defineEmits(['change'])
+
+//点击触事件
+const handleChangeActiveId = id => {
+  activeId.value = id
+  //将id传递到父组件方法中
+  emit('change', id)
+}
+
+const getData = (p = 1) => {
+  current_page.value = p
+  loading.value = true
+  getImageClassList(current_page.value)
+    .then(res => {
+      imageClasses.value = res.list
+      totalCount.value = res.totalCount
+      activeId.value = imageClasses.value[0] ? imageClasses.value[0].id : 0
+      handleChangeActiveId(activeId.value)
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
+
+getData()
+
+const handleSubmit = () => {
+  formRef.value.validate(valid => {
+    if (!valid) {
+      return false
+    }
+    formDrawerRef.value.showLoading()
+
+    const requestFunc =
+      editId.value == 0
+        ? createImageClass(form)
+        : updateImageClass(editId.value, form)
+    requestFunc
+      .then(() => {
+        toast('操作成功')
+        //重新加载数据
+        getData(editId.value ? current_page.value : 1)
+        formDrawerRef.value.close()
+      })
+      .finally(() => {
+        formDrawerRef.value.hideLoading()
+      })
+  })
+}
+
+const handleDelete = e => {
+  loading.value = true
+  deleteImageClass(e)
+    .then(() => {
+      toast('操作成功')
+      //重新加载数据
+      getData()
+    })
+    .finally(() => {
+      loading.value = false
+    })
+}
 
 defineExpose({
   handleCreate

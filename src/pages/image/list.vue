@@ -6,8 +6,8 @@
         <el-button type="warning">上传图片</el-button>
       </el-header>
       <el-container>
-        <image-aside ref="imageAsideRef" />
-        <image-main />
+        <image-aside ref="imageAsideRef" @change="handleChange" />
+        <image-main ref="imageMainRef" />
       </el-container>
     </el-container>
   </div>
@@ -33,8 +33,10 @@ onBeforeUnmount(() => {
 })
 
 const imageAsideRef = ref(null)
+const imageMainRef = ref(null)
 
 const handleCreate = () => imageAsideRef.value.handleCreate()
+const handleChange = id => imageMainRef.value.loadData(id)
 </script>
 <style scoped lang="postcss">
 .image-header {
