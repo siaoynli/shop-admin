@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { useTabList } from '~/composables/useTabList'
+import { useTabList } from '~/hooks/useTabList'
 
 const { activeTab, tabList, changeTab, removeTab, handleClose } = useTabList()
 </script>

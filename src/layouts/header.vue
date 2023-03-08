@@ -96,7 +96,7 @@ import {
 } from '@element-plus/icons-vue'
 import { useFullscreen } from '@vueuse/core'
 import FormDrawer from '~/components/form-drawer.vue'
-import { useRePassword, useLogout } from '~/composables/useManager'
+import { useRePassword, useLogout } from '~/hooks/useManager'
 
 const {
   form,

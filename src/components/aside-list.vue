@@ -2,22 +2,28 @@
   <div class="aside-list" :class="{ active: active }">
     <span class="truncate"> <slot /> </span>
     <span>
-      <el-button text type="primary" size="small" @click="handleEdit"
+      <el-button text type="primary" size="small" @click="$emit('edit')"
         ><el-icon :size="12"><Edit /></el-icon
       ></el-button>
 
-      <el-button text type="primary" size="small" @click="handleDelete"
-        ><el-icon :size="12"><Close /></el-icon
-      ></el-button>
+      <el-popconfirm
+        title="确定要删除这条记录吗?"
+        confirm-button-text="是"
+        cancel-button-text="否"
+        width="220"
+        @confirm="$emit('delete')"
+      >
+        <template #reference>
+          <el-button text type="primary" size="small"
+            ><el-icon :size="12"><Close /></el-icon
+          ></el-button>
+        </template>
+      </el-popconfirm>
     </span>
   </div>
 </template>
 <script setup>
-const emit = defineEmits(['edit', 'delete'])
-
-const handleEdit = () => emit('edit')
-const handleDelete = () => emit('delete')
-
+defineEmits(['edit', 'delete'])
 defineProps({
   title: {
     type: String,
