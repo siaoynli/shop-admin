@@ -17,6 +17,7 @@
         background
         layout="prev, next"
         :total="totalCount"
+        hide-on-single-page
         @current-change="getData"
       />
     </div>
@@ -97,7 +98,6 @@ const handleCreate = () => {
 
 const handleEdit = item => {
   formDrawerRef.value.open()
-
   form.name = item.name
   form.order = item.order
   editId.value = item.id

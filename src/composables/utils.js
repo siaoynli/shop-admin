@@ -23,6 +23,22 @@ export function showModal(
   })
 }
 
+export function showPrompt(
+  message,
+  inputValue = '',
+  title = '提示',
+  inputPattern = '',
+  inputErrorMessage = ''
+) {
+  return ElMessageBox.prompt(message, title, {
+    inputValue: inputValue,
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputPattern: inputPattern,
+    inputErrorMessage: inputErrorMessage
+  })
+}
+
 export function showFullLoading() {
   nProgress.start()
 }

@@ -19,3 +19,11 @@ export function deleteImageClass(id) {
 export function getImageList(id, page = 1, limit = 10) {
   return axios.get(`/admin/image_class/${id}/image/${page}?limit=${limit}`)
 }
+
+export function deleteImages(ids) {
+  return axios.post('/admin/image/delete_all', { ids })
+}
+
+export function updateImage(id, name) {
+  return axios.post('/admin/image/' + id, { name })
+}

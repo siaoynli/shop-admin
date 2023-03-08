@@ -2,7 +2,7 @@
   <div class="aside-list" :class="{ active: active }">
     <span class="truncate"> <slot /> </span>
     <span>
-      <el-button text type="primary" size="small" @click="$emit('edit')"
+      <el-button text type="primary" size="small" @click.stop="$emit('edit')"
         ><el-icon :size="12"><Edit /></el-icon
       ></el-button>
 
@@ -14,7 +14,7 @@
         @confirm="$emit('delete')"
       >
         <template #reference>
-          <el-button text type="primary" size="small"
+          <el-button text type="primary" size="small" @click.stop=""
             ><el-icon :size="12"><Close /></el-icon
           ></el-button>
         </template>
@@ -24,6 +24,7 @@
 </template>
 <script setup>
 defineEmits(['edit', 'delete'])
+
 defineProps({
   title: {
     type: String,
