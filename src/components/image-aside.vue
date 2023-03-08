@@ -20,12 +20,30 @@
       />
     </div>
   </el-aside>
+
+  <form-drawer ref="formDrawerRef" title="新增" @submit="handleSubmit">
+    <el-form
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      :inline="false"
+      label-width="150px"
+    >
+      <el-form-item prop="name" label="分类标题">
+        <el-input v-model="form.name" placeholder="" />
+      </el-form-item>
+      <el-form-item prop="order" label="排序">
+        <el-input-number v-model="form.order" :min="1" :max="1000" />
+      </el-form-item>
+    </el-form>
+  </form-drawer>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { getImageClassList } from '~/api/image'
 import AsideList from '~/components/aside-list.vue'
+import FormDrawer from './form-drawer.vue'
 
 const loading = ref(false)
 
@@ -51,6 +69,51 @@ const getData = (p = 1) => {
 
 getData()
 
+const formDrawerRef = ref(null)
+
+const handleCreate = () => formDrawerRef.value.open()
+
+const form = reactive({
+  name: '',
+  order: 50
+})
+const formRef = ref(null)
+
+const rules = {
+  name: [
+    {
+      required: true,
+      message: '请输入分类标题',
+      trigger: 'blur'
+    }
+  ],
+  order: [
+    {
+      required: true,
+      message: '请选择排序',
+      trigger: 'blur'
+    }
+  ]
+}
+
+const handleSubmit = () => {
+  formRef.value.validate(valid => {
+    if (!valid) {
+      return false
+    }
+    formDrawerRef.value.showLoading()
+    // updatePassword(form)
+    //   .then(() => {
+    //     toast('修改密码成功，请重新登陆')
+    //     store.dispatch('logout')
+    //     router.push('/')
+    //   })
+    //   .finally(() => {
+    //     formDrawerRef.value.hideLoading()
+    //   })
+  })
+}
+
 const handleEdit = () => {
   console.log('handleEdit')
 }
@@ -58,6 +121,10 @@ const handleEdit = () => {
 const handleDelete = () => {
   console.log('handleDelete')
 }
+
+defineExpose({
+  handleCreate
+})
 </script>
 
 <style scoped lang="postcss">

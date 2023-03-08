@@ -1,9 +1,12 @@
 <template>
   <div>
     <el-container class="bg-white rounded" :style="{ height: height + 'px' }">
-      <el-header class="image-header">Header</el-header>
+      <el-header class="image-header">
+        <el-button type="primary" @click="handleCreate">新增图片分类</el-button>
+        <el-button type="warning">上传图片</el-button>
+      </el-header>
       <el-container>
-        <image-aside />
+        <image-aside ref="imageAsideRef" />
         <image-main />
       </el-container>
     </el-container>
@@ -28,6 +31,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', () => resize())
 })
+
+const imageAsideRef = ref(null)
+
+const handleCreate = () => imageAsideRef.value.handleCreate()
 </script>
 <style scoped lang="postcss">
 .image-header {
