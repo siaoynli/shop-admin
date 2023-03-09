@@ -6,7 +6,6 @@ import progress from 'vite-plugin-progress'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import viteCompression from 'vite-plugin-compression'
 import { visualizer } from 'rollup-plugin-visualizer'
-
 import path from 'path'
 
 // https://vitejs.dev/config/
@@ -48,7 +47,8 @@ export default defineConfig(configEnv => {
 function setupVitePlugins(viteEnv) {
   const plugins = [
     vue(),
-    WindiCSS(), // 增加下面的配置项,这样在运行时就能检查eslint规范
+    WindiCSS(),
+    // 增加下面的配置项,这样在运行时就能检查eslint规范
     eslintPlugin({
       include: ['src/**/*.js', 'src/**/*.vue', 'src/*.js', 'src/*.vue']
     }),

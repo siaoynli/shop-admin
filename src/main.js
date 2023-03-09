@@ -7,7 +7,8 @@ import App from './App.vue'
 import store from './store'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import permission from '~/directives/permission'
-
+import './permission'
+import 'nprogress/nprogress.css'
 const appRun = () => {
   //全局引入图标
   const app = createApp(App)
@@ -23,5 +24,3 @@ const appRun = () => {
 }
 
 appRun()
-import './permission'
-import 'nprogress/nprogress.css'
