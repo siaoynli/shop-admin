@@ -63,10 +63,12 @@ function setupVitePlugins(viteEnv) {
     progress(),
     viteCompression(),
     visualizer({
+      gzipSize: true,
+      brotliSize: true,
+      open: true,
       emitFile: true,
       filename: 'stats.html'
     })
-    // chunkSplitPlugin({ strategy: 'default' })
   ]
 
   return plugins
