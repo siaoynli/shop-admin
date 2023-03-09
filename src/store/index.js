@@ -1,7 +1,12 @@
 import { createStore } from 'vuex'
 import { login, logout } from '~/api/manager'
 import { getinfo } from '~/api/manager'
-import { setToken, removeToken, removeTab } from '~/composables/auth'
+import {
+  setToken,
+  removeToken,
+  removeTab,
+  userInfoStorage
+} from '~/composables/auth'
 const store = createStore({
   state() {
     return {
@@ -50,6 +55,7 @@ const store = createStore({
             commit('SET_USERINFO', res)
             commit('SET_MENUS', res.menus)
             commit('SET_RULENAMES', res.ruleNames)
+            userInfoStorage(res)
             resolve(res)
           })
           .catch(err => reject(err))
@@ -65,6 +71,7 @@ const store = createStore({
           .finally(() => {
             removeToken()
             removeTab()
+
             commit('SET_USERINFO', {})
           })
       })

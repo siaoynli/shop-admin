@@ -1,4 +1,5 @@
 import { useCookies } from '@vueuse/integrations/useCookies'
+import { useStorage } from '@vueuse/core'
 
 const TokenKey = 'admin-token'
 
