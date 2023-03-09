@@ -1,6 +1,6 @@
 <template>
   <el-upload
-    accept="image/jpg,image/png,image/jpeg"
+    :accept="fileTypes"
     drag
     :action="uploadImageAction"
     multiple
@@ -27,10 +27,12 @@ const token = getToken()
 
 const emit = defineEmits(['success'])
 
+const fileTypes = 'image/jpg,image/png,image/jpeg'
+
 const uploadSuccess = (response, uploadFile, uploadFiles) => {
   emit('success', { response, uploadFile, uploadFiles })
 }
-const uploadError = (error, uploadFile, uploadFiles) => {
+const uploadError = error => {
   const msg = JSON.parse(error.message).msg || '上传失败'
   toast(msg, 'error')
 }
@@ -38,7 +40,7 @@ const uploadError = (error, uploadFile, uploadFiles) => {
 const beforeUpload = rawFile => {
   console.log(rawFile)
 
-  const fileTypeArray = ['image/png', 'image/jpg', 'image/jpeg']
+  const fileTypeArray = fileTypes.split(',')
   if (fileTypeArray.indexOf(rawFile.type) === -1) {
     toast('图片仅支持jpg、jpeg、png格式', 'error')
     return false
