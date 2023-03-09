@@ -6,19 +6,21 @@
         ><el-icon :size="12"><Edit /></el-icon
       ></el-button>
 
-      <el-popconfirm
-        title="确定要删除这条记录吗?"
-        confirm-button-text="是"
-        cancel-button-text="否"
-        width="220"
-        @confirm="$emit('delete')"
-      >
-        <template #reference>
-          <el-button text type="primary" size="small" @click.stop=""
-            ><el-icon :size="12"><Close /></el-icon
-          ></el-button>
-        </template>
-      </el-popconfirm>
+      <span @click.stop="() => {}">
+        <el-popconfirm
+          title="确定要删除这条记录吗?"
+          confirm-button-text="是"
+          cancel-button-text="否"
+          width="220"
+          @confirm="$emit('delete')"
+        >
+          <template #reference>
+            <el-button text type="primary" size="small"
+              ><el-icon :size="12"><Close /></el-icon
+            ></el-button>
+          </template>
+        </el-popconfirm>
+      </span>
     </span>
   </div>
 </template>

@@ -25,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   //设置页面标题
-  let title = to.meta.title ? to.meta.title + '-杭州网' : 'loading...'
+  let title = to.meta.title ? to.meta.title + '-杭州网' : ''
   document.title = title
   //动态路由，刷新页面报404
   let hasNewRoutes = false

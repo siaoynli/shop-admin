@@ -77,8 +77,10 @@ const loading = ref(false)
 const classId = ref(0)
 const limit = ref(18)
 
-const getData = (p = 1) => {
-  current_page.value = p
+function getData(page = null) {
+  if (page) {
+    current_page.value = page
+  }
   loading.value = true
   getImageList(classId.value, current_page.value, limit.value)
     .then(res => {

@@ -29,6 +29,7 @@ const loading = ref(false)
 
 const showLoading = () => (loading.value = true)
 const hideLoading = () => (loading.value = false)
+const clearValidate = () => (loading.value = false)
 
 const emit = defineEmits(['submit'])
 //通知外部组件submit事件
@@ -56,6 +57,7 @@ defineProps({
 defineExpose({
   open,
   close,
+  clearValidate,
   showLoading,
   hideLoading
 })

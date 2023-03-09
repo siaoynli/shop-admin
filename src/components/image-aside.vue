@@ -89,6 +89,17 @@ const rules = {
   ]
 }
 
+const resetForm = (row = []) => {
+  if (formRef.value) {
+    formRef.value.clearValidate()
+  }
+  if (row) {
+    for (const key in form) {
+      form[key] = row[key]
+    }
+  }
+}
+
 const handleCreate = () => {
   editId.value = 0
   form.name = ''
@@ -96,11 +107,10 @@ const handleCreate = () => {
   formDrawerRef.value.open()
 }
 
-const handleEdit = item => {
+const handleEdit = row => {
+  resetForm(row)
   formDrawerRef.value.open()
-  form.name = item.name
-  form.order = item.order
-  editId.value = item.id
+  editId.value = row.id
 }
 
 const emit = defineEmits(['change'])
@@ -112,8 +122,10 @@ const handleChangeActiveId = id => {
   emit('change', id)
 }
 
-const getData = (p = 1) => {
-  current_page.value = p
+function getData(page = null) {
+  if (page) {
+    current_page.value = page
+  }
   loading.value = true
   getImageClassList(current_page.value)
     .then(res => {
