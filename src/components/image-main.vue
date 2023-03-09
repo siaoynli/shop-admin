@@ -11,7 +11,7 @@
             <el-image
               :src="item.url"
               fit="cover"
-              :zoom-rate="1.2"
+              :zoom-rate="0.8"
               :preview-src-list="[item.url]"
               :initial-index="0"
               :lazy="true"
@@ -108,7 +108,7 @@ const rename = (id, name) => {
   dataList.value = arr
 }
 //上传成功
-const handleSuccess = (response, uploadFile, uploadFiles) => {
+const handleSuccess = response => {
   console.log('upload success:', response)
   getData()
 }
