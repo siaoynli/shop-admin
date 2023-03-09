@@ -3,7 +3,7 @@
     <el-container class="bg-white rounded" :style="{ height: height + 'px' }">
       <el-header class="image-header">
         <el-button type="primary" @click="handleCreate">新增图片分类</el-button>
-        <el-button type="warning">上传图片</el-button>
+        <el-button type="warning" @click="handleUpload">上传图片</el-button>
       </el-header>
       <el-container>
         <image-aside ref="imageAsideRef" @change="handleChange" />
@@ -37,6 +37,8 @@ const imageMainRef = ref(null)
 
 const handleCreate = () => imageAsideRef.value.handleCreate()
 const handleChange = id => imageMainRef.value.loadData(id)
+
+const handleUpload = () => imageMainRef.value.openUploadDrawer()
 </script>
 <style scoped lang="postcss">
 .image-header {

@@ -54,11 +54,21 @@
       />
     </div>
   </el-main>
+
+  <el-drawer v-model="drawer" title="上传图片">
+    <upload-file :data="{ image_class_id: classId }" @success="handleSuccess" />
+  </el-drawer>
 </template>
 <script setup>
 import { ref } from 'vue'
 import { getImageList, deleteImages, updateImage } from '~/api/image'
 import { toast, showPrompt } from '~/composables/utils'
+import UploadFile from '~/components/upload-file.vue'
+
+// 上传图片
+const drawer = ref(false)
+
+const openUploadDrawer = () => (drawer.value = true)
 
 const current_page = ref(1)
 const totalCount = ref(0)
@@ -97,6 +107,11 @@ const rename = (id, name) => {
   })
   dataList.value = arr
 }
+//上传成功
+const handleSuccess = (response, uploadFile, uploadFiles) => {
+  console.log('upload success:', response)
+  getData()
+}
 
 const handleEdit = ({ id, name }) => {
   showPrompt('请输入图片名称', name)
@@ -127,7 +142,8 @@ const handleDelete = id => {
 }
 
 defineExpose({
-  loadData
+  loadData,
+  openUploadDrawer
 })
 </script>
 

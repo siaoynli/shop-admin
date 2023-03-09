@@ -27,3 +27,5 @@ export function deleteImages(ids) {
 export function updateImage(id, name) {
   return axios.post('/admin/image/' + id, { name })
 }
+
+export const uploadImageAction = '/api/admin/image/upload'
