@@ -64,7 +64,7 @@
               :active-value="1"
               :inactive-value="0"
               :loading="row.statusLoading"
-              :disabled="row.super"
+              :disabled="row.super == 1"
               @change="val => handleChangeStatus(val, row)"
             />
           </template>
@@ -117,11 +117,33 @@
         :inline="false"
         label-width="150px"
       >
-        <el-form-item prop="title" label="公告标题">
-          <el-input v-model="form.title" placeholder="" />
+        <el-form-item prop="username" label="用户名">
+          <el-input v-model="form.username" placeholder="" />
         </el-form-item>
-        <el-form-item prop="content" label="内容">
-          <el-input v-model="form.content" type="textarea" :rows="5" />
+        <el-form-item prop="password" label="密码">
+          <el-input
+            v-model="form.password"
+            placeholder=""
+            type="password"
+            show-password
+          />
+        </el-form-item>
+        <el-form-item prop="role_id" label="所属角色">
+          <el-select v-model="form.role_id" placeholder="选择所属角色">
+            <el-option
+              v-for="item in roles"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="status" label="状态">
+          <el-switch
+            v-model="form.status"
+            :active-value="1"
+            :inactive-value="0"
+          />
         </el-form-item>
       </el-form>
     </form-drawer>
@@ -129,9 +151,11 @@
 </template>
 <script setup>
 import { ref, computed, reactive } from 'vue'
-import { createNotice, updateNotice } from '~/api/notice'
+
 import { UserFilled, Search } from '@element-plus/icons-vue'
 import {
+  createManager,
+  updateManager,
   getManagerList,
   deleteManager,
   updateManagerStatus
@@ -144,6 +168,7 @@ const current_page = ref(1)
 const limit = ref(15)
 const loading = ref(false)
 const searchLoading = ref(false)
+const roles = ref([])
 
 const keyword = ref('')
 
@@ -170,6 +195,7 @@ function getData(page = null) {
         o.statusLoading = false
         return o
       })
+      roles.value = res.roles
       totalCount.value = res.totalCount
     })
     .finally(() => {
@@ -187,27 +213,30 @@ const handleReset = () => {
 }
 
 const form = reactive({
-    title: '',
-    content: ''
-  }),
-  formDefault = form
+  username: '',
+  password: '',
+  role_id: null,
+  status: 1,
+  avatar: ''
+})
+
 //重置表单用到的变量
 
 const formDrawerRef = ref(null)
 const formRef = ref(null)
 
 const rules = {
-  title: [
+  username: [
     {
       required: true,
-      message: '请输入公告标题',
+      message: '请输入用户名',
       trigger: 'blur'
     }
   ],
-  content: [
+  password: [
     {
       required: true,
-      message: '请输入内容',
+      message: '请输入密码',
       trigger: 'blur'
     }
   ]
@@ -223,12 +252,16 @@ const resetForm = (row = false) => {
     }
     return
   }
-
-  form.value = formDefault.value
 }
 
 const handleCreate = () => {
-  resetForm()
+  resetForm({
+    username: '',
+    password: '',
+    role_id: roles.value[0].id,
+    status: 1,
+    avatar: ''
+  })
   editId.value = 0
   formDrawerRef.value.open()
 }
@@ -241,7 +274,9 @@ const handleSubmit = () => {
     formDrawerRef.value.showLoading()
 
     const requestFunc =
-      editId.value == 0 ? createNotice(form) : updateNotice(editId.value, form)
+      editId.value == 0
+        ? createManager(form)
+        : updateManager(editId.value, form)
     requestFunc
       .then(() => {
         toast('操作成功')

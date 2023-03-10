@@ -117,10 +117,9 @@ function getData(page = null) {
 getData()
 
 const form = reactive({
-    title: '',
-    content: ''
-  }),
-  formDefault = form
+  title: '',
+  content: ''
+})
 //重置表单用到的变量
 
 const formDrawerRef = ref(null)
@@ -153,12 +152,13 @@ const resetForm = (row = false) => {
     }
     return
   }
-
-  form.value = formDefault.value
 }
 
 const handleCreate = () => {
-  resetForm()
+  resetForm({
+    title: '',
+    content: ''
+  })
   editId.value = 0
   formDrawerRef.value.open()
 }
