@@ -15,3 +15,19 @@ export function logout() {
 export function updatePassword(data) {
   return axios.post('admin/updatepassword', data)
 }
+
+export function getManagerList(page = 1, params = { keyword: '', limit: 10 }) {
+  return axios.get(`/admin/manager/${page}`, { params })
+}
+
+export function createManager(data) {
+  return axios.post('/admin/manager', data)
+}
+
+export function updateManager(id, data) {
+  return axios.post(`/admin/manager/${id}`, data)
+}
+
+export function deleteManager(id) {
+  return axios.post(`/admin/manager/${id}/delete`)
+}

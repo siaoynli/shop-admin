@@ -19,10 +19,32 @@
         stripe
         style="width: 100%"
       >
-        <el-table-column prop="id" label="ID" width="100" />
-        <el-table-column prop="title" label="标题" width="180" />
-        <el-table-column prop="content" label="内容" />
-        <el-table-column prop="create_time" label="发布时间" width="180" />
+        <el-table-column label="管理员">
+          <template #default="{ row }">
+            <div class="flex items-center">
+              <el-avatar v-if="row.avatar" :size="40" :src="row.avatar" />
+              <el-avatar v-else :size="40" :icon="UserFilled" />
+
+              <div class="ml-3 flex flex-col">
+                <span> {{ row.username }}</span>
+                <span> ID:{{ row.id }}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="role.name" label="管理员" align="center" />
+
+        <el-table-column label="状态" width="180">
+          <template #default="{ row }">
+            <el-switch
+              :model-value="row.status"
+              :active-value="1"
+              :inactive-value="0"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column prop="create_time" label="创建时间" width="180" />
         <el-table-column align="right" label="操作" width="180">
           <template #default="scope">
             <el-button size="small" @click="handleEdit(scope.row)"
@@ -82,12 +104,9 @@
 </template>
 <script setup>
 import { ref, computed, reactive } from 'vue'
-import {
-  getNoticeList,
-  deleteNotice,
-  createNotice,
-  updateNotice
-} from '~/api/notice'
+import { createNotice, updateNotice } from '~/api/notice'
+import { UserFilled } from '@element-plus/icons-vue'
+import { getManagerList, deleteManager } from '~/api/manager'
 import { toast } from '~/composables/utils'
 import FormDrawer from '~/components/form-drawer.vue'
 const tableData = ref([])
@@ -105,7 +124,10 @@ function getData(page = null) {
   }
 
   loading.value = true
-  getNoticeList(current_page.value, limit.value)
+  getManagerList(current_page.value, {
+    limit: limit.value,
+    keyword: ''
+  })
     .then(res => {
       tableData.value = res.list
       totalCount.value = res.totalCount
@@ -193,7 +215,7 @@ const handleEdit = row => {
 
 const handleDelete = id => {
   loading.value = true
-  deleteNotice(id)
+  deleteManager(id)
     .then(() => {
       toast('操作成功')
       getData(current_page.value)

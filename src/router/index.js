@@ -63,6 +63,14 @@ const asyncRoutes = [
     }
   },
   {
+    path: '/manager/list',
+    component: () => import('~/pages/manager/list.vue'),
+    name: '/manager/list',
+    meta: {
+      title: '管理员管理'
+    }
+  },
+  {
     path: '/comment/list',
     component: () => import('~/pages/comment/list.vue'),
     name: '/comment/list',

@@ -14,7 +14,7 @@ export default defineConfig(configEnv => {
 
   const srcPath = path.resolve(__dirname, 'src')
 
-  const isOpenProxy = viteEnv.VITE_HTTP_PROXY
+  const isOpenProxy = !!viteEnv.VITE_HTTP_PROXY
 
   const envConfig = {
     proxyPattern: '/api',
