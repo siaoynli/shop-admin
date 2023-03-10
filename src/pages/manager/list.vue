@@ -1,17 +1,39 @@
 <template>
   <div>
     <el-card class="border-0" shadow="never">
-      <div class="flex justify-between items-center">
-        <div class="pb-3">
-          <el-button type="primary" class="text-gray-200" @click="handleCreate"
-            >新增</el-button
+      <div class="">
+        <div class="flex justify-end items-center">
+          <span class="text-sm text-gray-600 mr-3">关键词</span>
+          <el-input
+            v-model="keyword"
+            class="w-50 mr-3"
+            placeholder="请输入管理员昵称"
+            :prefix-icon="Search"
+            clearable
+          /><el-button
+            type="primary"
+            :disabled="keyword == ''"
+            :loading="searchLoading"
+            @click="getData()"
+            >搜索</el-button
           >
+          <el-button @click="handleReset">重置</el-button>
         </div>
-        <el-tooltip effect="dark" content="刷新数据" placement="top">
-          <el-icon class="cursor-pointer" @click="getData()"
-            ><Refresh
-          /></el-icon>
-        </el-tooltip>
+        <div class="flex justify-between items-center">
+          <div class="pb-3">
+            <el-button
+              type="primary"
+              class="text-gray-200"
+              @click="handleCreate"
+              >新增</el-button
+            >
+          </div>
+          <el-tooltip effect="dark" content="刷新数据" placement="top">
+            <el-icon class="cursor-pointer" @click="getData()"
+              ><Refresh
+            /></el-icon>
+          </el-tooltip>
+        </div>
       </div>
       <el-table
         v-loading="loading"
@@ -41,28 +63,31 @@
               :model-value="row.status"
               :active-value="1"
               :inactive-value="0"
+              :loading="row.statusLoading"
+              :disabled="row.super"
+              @change="val => handleChangeStatus(val, row)"
             />
           </template>
         </el-table-column>
         <el-table-column prop="create_time" label="创建时间" width="180" />
         <el-table-column align="right" label="操作" width="180">
-          <template #default="scope">
-            <el-button size="small" @click="handleEdit(scope.row)"
-              >编辑</el-button
-            >
-            <span class="pl-2" @click.stop="() => {}">
-              <el-popconfirm
-                title="确定要删除这条记录吗?"
-                confirm-button-text="是"
-                cancel-button-text="否"
-                width="220"
-                @confirm="handleDelete(scope.row.id)"
-              >
-                <template #reference>
-                  <el-button size="small" type="danger">删除</el-button>
-                </template>
-              </el-popconfirm>
-            </span>
+          <template #default="{ row }">
+            <template v-if="!row.super">
+              <el-button size="small" @click="handleEdit(row)">编辑</el-button>
+              <span class="pl-2" @click.stop="() => {}">
+                <el-popconfirm
+                  title="确定要删除这条记录吗?"
+                  confirm-button-text="是"
+                  cancel-button-text="否"
+                  width="220"
+                  @confirm="handleDelete(row.id)"
+                >
+                  <template #reference>
+                    <el-button size="small" type="danger">删除</el-button>
+                  </template>
+                </el-popconfirm>
+              </span>
+            </template>
           </template>
         </el-table-column>
       </el-table>
@@ -105,8 +130,12 @@
 <script setup>
 import { ref, computed, reactive } from 'vue'
 import { createNotice, updateNotice } from '~/api/notice'
-import { UserFilled } from '@element-plus/icons-vue'
-import { getManagerList, deleteManager } from '~/api/manager'
+import { UserFilled, Search } from '@element-plus/icons-vue'
+import {
+  getManagerList,
+  deleteManager,
+  updateManagerStatus
+} from '~/api/manager'
 import { toast } from '~/composables/utils'
 import FormDrawer from '~/components/form-drawer.vue'
 const tableData = ref([])
@@ -114,6 +143,9 @@ const totalCount = ref(0)
 const current_page = ref(1)
 const limit = ref(15)
 const loading = ref(false)
+const searchLoading = ref(false)
+
+const keyword = ref('')
 
 const editId = ref(0)
 const drawerTitle = computed(() => (editId.value == 0 ? '新增' : '编辑'))
@@ -123,20 +155,36 @@ function getData(page = null) {
     current_page.value = page
   }
 
-  loading.value = true
+  if (keyword.value) {
+    searchLoading.value = true
+  } else {
+    loading.value = true
+  }
+
   getManagerList(current_page.value, {
     limit: limit.value,
-    keyword: ''
+    keyword: keyword.value
   })
     .then(res => {
-      tableData.value = res.list
+      tableData.value = res.list.map(o => {
+        o.statusLoading = false
+        return o
+      })
       totalCount.value = res.totalCount
     })
     .finally(() => {
       loading.value = false
+      searchLoading.value = false
     })
 }
 getData()
+
+const handleReset = () => {
+  if (keyword.value) {
+    keyword.value = ''
+    getData()
+  }
+}
 
 const form = reactive({
     title: '',
@@ -205,6 +253,19 @@ const handleSubmit = () => {
         formDrawerRef.value.hideLoading()
       })
   })
+}
+
+const handleChangeStatus = (status, row) => {
+  row.statusLoading = true
+
+  updateManagerStatus(row.id, status)
+    .then(() => {
+      toast('操作成功')
+      row.status = status
+    })
+    .finally(() => {
+      row.statusLoading = false
+    })
 }
 
 const handleEdit = row => {

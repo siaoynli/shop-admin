@@ -99,30 +99,20 @@ const loadData = id => {
   getData()
 }
 
-const rename = (id, name) => {
-  let arr = []
-  dataList.value.forEach(item => {
-    if (item.id == id) {
-      item.name = name
-    }
-    arr.push(item)
-  })
-  dataList.value = arr
-}
 //上传成功
 const handleSuccess = response => {
   console.log('upload success:', response)
   getData()
 }
 
-const handleEdit = ({ id, name }) => {
-  showPrompt('请输入图片名称', name)
+const handleEdit = item => {
+  showPrompt('请输入图片名称', item.name)
     .then(({ value }) => {
       loading.value = true
-      updateImage(id, value)
+      updateImage(item.id, value)
         .then(() => {
           toast('操作成功')
-          rename(id, value)
+          item.name = value
         })
         .finally(() => {
           loading.value = false

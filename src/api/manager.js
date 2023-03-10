@@ -28,6 +28,10 @@ export function updateManager(id, data) {
   return axios.post(`/admin/manager/${id}`, data)
 }
 
+export function updateManagerStatus(id, status = 0) {
+  return axios.post(`/admin/manager/${id}/update_status`, { status })
+}
+
 export function deleteManager(id) {
   return axios.post(`/admin/manager/${id}/delete`)
 }
