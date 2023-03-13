@@ -187,6 +187,7 @@ defineExpose({
 .image-aside {
   border-right: 1px #eee solid;
   position: relative;
+  height: 100%;
 }
 
 .image-aside .top {
