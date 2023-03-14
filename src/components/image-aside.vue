@@ -23,7 +23,12 @@
     </div>
   </el-aside>
 
-  <form-drawer ref="formDrawerRef" :title="drawerTitle" @submit="handleSubmit">
+  <form-drawer
+    ref="formDrawerRef"
+    :title="drawerTitle"
+    destroy-on-close
+    @submit="handleSubmit"
+  >
     <el-form
       ref="formRef"
       :model="form"
@@ -206,5 +211,9 @@ defineExpose({
   left: 0;
   right: 0;
   @apply flex   justify-center items-center;
+}
+
+.el-form-item {
+  margin-bottom: 18px !important;
 }
 </style>

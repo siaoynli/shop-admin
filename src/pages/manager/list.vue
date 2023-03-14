@@ -110,17 +110,19 @@
       :title="drawerTitle"
       @submit="handleSubmit"
     >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        :inline="false"
-        label-width="150px"
-      >
-        <el-form-item prop="username" label="用户名">
+      <el-form ref="formRef" :model="form" :inline="false" label-width="150px">
+        <el-form-item
+          prop="username"
+          label="用户名"
+          :rules="[{ required: true, message: '请输入用户名' }]"
+        >
           <el-input v-model="form.username" placeholder="" />
         </el-form-item>
-        <el-form-item prop="password" label="密码">
+        <el-form-item
+          prop="password"
+          label="密码"
+          :rules="[{ required: editId == 0, message: '请输入密码' }]"
+        >
           <el-input
             v-model="form.password"
             placeholder=""
@@ -229,23 +231,6 @@ const form = reactive({
 
 const formDrawerRef = ref(null)
 const formRef = ref(null)
-
-const rules = {
-  username: [
-    {
-      required: true,
-      message: '请输入用户名',
-      trigger: 'blur'
-    }
-  ],
-  password: [
-    {
-      required: true,
-      message: '请输入密码',
-      trigger: 'blur'
-    }
-  ]
-}
 
 const resetForm = (row = false) => {
   if (formRef.value) {
