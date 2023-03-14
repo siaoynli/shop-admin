@@ -128,6 +128,10 @@
             show-password
           />
         </el-form-item>
+
+        <el-form-item prop="avatar" label="选择头像">
+          <choose-image v-model="form.avatar" />
+        </el-form-item>
         <el-form-item prop="role_id" label="所属角色">
           <el-select v-model="form.role_id" placeholder="选择所属角色">
             <el-option
@@ -162,6 +166,7 @@ import {
 } from '~/api/manager'
 import { toast } from '~/composables/utils'
 import FormDrawer from '~/components/form-drawer.vue'
+import ChooseImage from '~/components/choose-image.vue'
 const tableData = ref([])
 const totalCount = ref(0)
 const current_page = ref(1)

@@ -7,6 +7,7 @@
             shadow="hover"
             class="relative mb-3"
             :body-style="{ padding: 0 }"
+            :class="{ 'border-blue-500': item.checked }"
           >
             <el-image
               :src="item.url"
@@ -23,6 +24,12 @@
             ></el-image>
             <div class="image-title">{{ item.name }}</div>
             <div class="flex justify-center items-center p-2">
+              <el-checkbox
+                v-model="item.checked"
+                size="large"
+                class="mr-3"
+                @change="handleChange(item)"
+              />
               <el-button text type="primary" @click="handleEdit(item)"
                 >修改</el-button
               >
@@ -60,7 +67,7 @@
   </el-drawer>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { getImageList, deleteImages, updateImage } from '~/api/image'
 import { toast, showPrompt } from '~/composables/utils'
 import UploadFile from '~/components/upload-file.vue'
@@ -84,7 +91,10 @@ function getData(page = null) {
   loading.value = true
   getImageList(classId.value, current_page.value, limit.value)
     .then(res => {
-      dataList.value = res.list
+      dataList.value = res.list.map(o => {
+        o.checked = false
+        return o
+      })
       totalCount.value = res.totalCount
     })
     .finally(() => {
@@ -131,6 +141,19 @@ const handleDelete = id => {
     .finally(() => {
       loading.value = false
     })
+}
+
+const chooseImages = computed(() => dataList.value.filter(o => o.checked))
+
+const emit = defineEmits(['choose'])
+
+const handleChange = item => {
+  if (item.checked && chooseImages.value.length > 1) {
+    item.checked = false
+    toast('最多只能选择一张图片', 'error')
+    return
+  }
+  emit('choose', chooseImages.value)
 }
 
 defineExpose({
