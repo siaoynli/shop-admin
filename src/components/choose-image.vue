@@ -12,7 +12,12 @@
     </div>
   </div>
 
-  <el-dialog v-model="dialogVisible" title="选择头像" width="80%">
+  <el-dialog
+    v-model="dialogVisible"
+    title="选择头像"
+    width="80%"
+    destroy-on-close
+  >
     <el-container class="bg-white rounded" style="height: 50vh">
       <el-header class="image-header">
         <el-button type="primary" @click="handleCreate">新增图片分类</el-button>
