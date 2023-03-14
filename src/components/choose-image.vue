@@ -1,12 +1,22 @@
 <template>
   <div class="flex items-center">
-    <el-image
+    <el-popconfirm
       v-if="modelValue"
-      style="width: 100px; height: 100px"
-      :src="modelValue"
-      fit="cover"
-      class="mr-2"
-    />
+      title="确定要删除吗?"
+      confirm-button-text="是"
+      cancel-button-text="否"
+      @confirm="handleDelete()"
+    >
+      <template #reference>
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="modelValue"
+          fit="cover"
+          class="mr-2 cursor-pointer"
+        />
+      </template>
+    </el-popconfirm>
+
     <div class="choose-container" @click="open">
       <el-icon :size="25"><Plus /></el-icon>
     </div>
@@ -74,6 +84,10 @@ const emit = defineEmits(['update:modelValue'])
 const handleOk = () => {
   emit('update:modelValue', imageUrls[0])
   close()
+}
+
+const handleDelete = () => {
+  emit('update:modelValue', '')
 }
 </script>
 
