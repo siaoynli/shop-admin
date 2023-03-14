@@ -1,9 +1,9 @@
 <template>
   <div class="flex items-center">
     <el-image
-      v-if="imagesUrl.length"
+      v-if="modelValue"
       style="width: 100px; height: 100px"
-      :src="imagesUrl[0]"
+      :src="modelValue"
       fit="cover"
       class="mr-2"
     />
@@ -20,7 +20,7 @@
       </el-header>
       <el-container>
         <image-aside ref="imageAsideRef" @change="handleChange" />
-        <image-main ref="imageMainRef" @choose="handleChoose" />
+        <image-main ref="imageMainRef" open-choose @choose="handleChoose" />
       </el-container>
     </el-container>
 
@@ -33,11 +33,12 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref } from 'vue'
 import ImageAside from '~/components/image-aside.vue'
 import ImageMain from '~/components/image-main.vue'
 
 const dialogVisible = ref(false)
+let imageUrls = []
 
 const open = () => (dialogVisible.value = true)
 const close = () => (dialogVisible.value = false)
@@ -45,7 +46,6 @@ const close = () => (dialogVisible.value = false)
 const imageAsideRef = ref(null)
 const imageMainRef = ref(null)
 
-let imagesUrl = []
 const handleCreate = () => {
   imageAsideRef.value.handleCreate()
 }
@@ -54,7 +54,7 @@ const handleChange = id => imageMainRef.value.loadData(id)
 const handleUpload = () => imageMainRef.value.openUploadDrawer()
 
 const handleChoose = items => {
-  imagesUrl = items.map(o => o.url)
+  imageUrls = items.map(o => o.url)
 }
 
 defineProps({
@@ -67,7 +67,7 @@ defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const handleOk = () => {
-  emit('update:modelValue', imagesUrl[0])
+  emit('update:modelValue', imageUrls[0])
   close()
 }
 </script>

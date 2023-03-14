@@ -25,6 +25,7 @@
             <div class="image-title">{{ item.name }}</div>
             <div class="flex justify-center items-center p-2">
               <el-checkbox
+                v-if="openChoose"
                 v-model="item.checked"
                 size="large"
                 class="mr-3"
@@ -155,6 +156,13 @@ const handleChange = item => {
   }
   emit('choose', chooseImages.value)
 }
+
+defineProps({
+  openChoose: {
+    type: Boolean,
+    default: false
+  }
+})
 
 defineExpose({
   loadData,
