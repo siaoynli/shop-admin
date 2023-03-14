@@ -116,15 +116,33 @@
           label="用户名"
           :rules="[{ required: true, message: '请输入用户名' }]"
         >
-          <el-input v-model="form.username" placeholder="" />
+          <el-input v-model.trim="form.username" placeholder="" />
         </el-form-item>
         <el-form-item
           prop="password"
           label="密码"
-          :rules="[{ required: editId == 0, message: '请输入密码' }]"
+          :rules="[
+            { required: editId == 0, message: '请输入密码' },
+            { validator: validatePassword, trigger: 'change' }
+          ]"
         >
           <el-input
-            v-model="form.password"
+            v-model.trim="form.password"
+            placeholder=""
+            type="password"
+            show-password
+          />
+        </el-form-item>
+        <el-form-item
+          prop="repassword"
+          label="确认密码"
+          :rules="[
+            { required: editId == 0, message: '请输入确认密码' },
+            { validator: validateRePassword, trigger: 'change' }
+          ]"
+        >
+          <el-input
+            v-model.trim="form.repassword"
             placeholder=""
             type="password"
             show-password
@@ -222,6 +240,7 @@ const handleReset = () => {
 const form = reactive({
   username: '',
   password: '',
+  repassword: '',
   role_id: null,
   status: 1,
   avatar: ''
@@ -309,5 +328,31 @@ const handleDelete = id => {
     .finally(() => {
       loading.value = false
     })
+}
+
+const validatePassword = (rule, value, callback) => {
+  if (value != undefined) {
+    console.log('value', value)
+
+    if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,20}$/g.test(
+        value
+      )
+    ) {
+      callback(
+        new Error('请输入包含英文字母大小写、数字和特殊符号的 6-20 位组合')
+      )
+    }
+  }
+  callback()
+}
+
+const validateRePassword = (rule, value, callback) => {
+  if (value != undefined) {
+    if (form.password !== value) {
+      callback(new Error('两次密码不一致'))
+    }
+  }
+  callback()
 }
 </script>
