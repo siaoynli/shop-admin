@@ -24,7 +24,7 @@
 
   <el-dialog
     v-model="dialogVisible"
-    title="选择头像"
+    title="选择图片"
     width="80%"
     destroy-on-close
   >
