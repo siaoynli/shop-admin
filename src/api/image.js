@@ -1,7 +1,7 @@
 import axios from '~/axios'
 
-export function getImageClassList(page = 1, limit = 10) {
-  return axios.get('/admin/image_class/' + page + '?limit=' + limit)
+export function getImageClassList(page = 1, params = { limit: 10 }) {
+  return axios.get('/admin/image_class/' + page, params)
 }
 
 export function createImageClass(data) {
@@ -16,8 +16,10 @@ export function deleteImageClass(id) {
   return axios.post('/admin/image_class/' + id + '/delete')
 }
 
-export function getImageList(id, page = 1, limit = 10) {
-  return axios.get(`/admin/image_class/${id}/image/${page}?limit=${limit}`)
+export function getImageList(page = 1, params = { id: 1, limit: 10 }) {
+  return axios.get(
+    `/admin/image_class/${params.id}/image/${page}?limit=${params.limit}`
+  )
 }
 
 export function deleteImages(ids) {

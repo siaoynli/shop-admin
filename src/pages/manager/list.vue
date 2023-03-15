@@ -179,8 +179,7 @@
   </div>
 </template>
 <script setup>
-import { ref, computed, reactive } from 'vue'
-
+import { ref } from 'vue'
 import { UserFilled, Search } from '@element-plus/icons-vue'
 import {
   createManager,
@@ -189,22 +188,13 @@ import {
   deleteManager,
   updateManagerStatus
 } from '~/api/manager'
-import { toast } from '~/composables/utils'
 import FormDrawer from '~/components/form-drawer.vue'
 import ChooseImage from '~/components/choose-image.vue'
 
-import { useInitTable } from '~/hooks/useCommon.js'
+import { useInitTable, useInitForm } from '~/hooks/useCommon.js'
+import { useValidator } from '~/hooks/useValidator.js'
 
 const roles = ref([])
-
-const onGetListSuccess = res => {
-  tableData.value = res.list.map(o => {
-    o.statusLoading = false
-    return o
-  })
-  roles.value = res.roles
-  totalCount.value = res.totalCount
-}
 
 const {
   searchForm,
@@ -214,131 +204,48 @@ const {
   currentPage,
   totalCount,
   limit,
-  getData
+  getData,
+  handleDelete,
+  handleChangeStatus
 } = useInitTable({
   searchForm: { keyword: '' },
   getList: getManagerList,
-  onGetListSuccess: onGetListSuccess
+  onGetListSuccess: res => {
+    tableData.value = res.list.map(o => {
+      o.statusLoading = false
+      return o
+    })
+    roles.value = res.roles
+    totalCount.value = res.totalCount
+  },
+  delete: deleteManager,
+  updateStatus: updateManagerStatus
 })
 
-const editId = ref(0)
-const drawerTitle = computed(() => (editId.value == 0 ? '新增' : '编辑'))
-
-const form = reactive({
-  username: '',
-  password: '',
-  repassword: '',
-  role_id: null,
-  status: 1,
-  avatar: ''
-})
-
-//重置表单用到的变量
-const formDrawerRef = ref(null)
-const formRef = ref(null)
-
-const resetForm = (row = false) => {
-  if (formRef.value) {
-    formRef.value.clearValidate()
-  }
-  if (row) {
-    for (const key in form) {
-      form[key] = row[key]
-    }
-    return
-  }
-}
-
-const handleCreate = () => {
-  resetForm({
+const {
+  formDrawerRef,
+  drawerTitle,
+  formRef,
+  form,
+  editId,
+  handleCreate,
+  handleEdit,
+  handleSubmit
+} = useInitForm({
+  form: {
     username: '',
     password: '',
-    role_id: roles.value[0].id,
+    repassword: '',
+    role_id: null,
     status: 1,
     avatar: ''
-  })
-  editId.value = 0
-  formDrawerRef.value.open()
-}
+  },
+  create: createManager,
+  update: updateManager,
+  getData
+})
 
-const handleSubmit = () => {
-  formRef.value.validate(valid => {
-    if (!valid) {
-      return false
-    }
-    formDrawerRef.value.showLoading()
-
-    const requestFunc =
-      editId.value == 0
-        ? createManager(form)
-        : updateManager(editId.value, form)
-    requestFunc
-      .then(() => {
-        toast('操作成功')
-        //重新加载数据
-        getData(editId.value ? currentPage.value : 1)
-        formDrawerRef.value.close()
-      })
-      .finally(() => {
-        formDrawerRef.value.hideLoading()
-      })
-  })
-}
-
-const handleChangeStatus = (status, row) => {
-  row.statusLoading = true
-
-  updateManagerStatus(row.id, status)
-    .then(() => {
-      toast('操作成功')
-      row.status = status
-    })
-    .finally(() => {
-      row.statusLoading = false
-    })
-}
-
-const handleEdit = row => {
-  resetForm(row)
-  editId.value = row.id
-  formDrawerRef.value.open()
-}
-
-const handleDelete = id => {
-  loading.value = true
-  deleteManager(id)
-    .then(() => {
-      toast('操作成功')
-      getData(currentPage.value)
-    })
-    .finally(() => {
-      loading.value = false
-    })
-}
-
-const validatePassword = (rule, value, callback) => {
-  if (value != undefined) {
-    console.log('value', value)
-
-    if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,20}$/g.test(
-        value
-      )
-    ) {
-      callback(
-        new Error('请输入包含英文字母大小写、数字和特殊符号的 6-20 位组合')
-      )
-    }
-  }
-  callback()
-}
-
-const validateRePassword = (rule, value, callback) => {
-  if (value != undefined) {
-    if (form.password !== value) {
-      callback(new Error('两次密码不一致'))
-    }
-  }
-  callback()
-}
+const { validatePassword, validateRePassword } = useValidator({
+  password: form.password
+})
 </script>

@@ -90,7 +90,10 @@ function getData(page = null) {
     currentPage.value = page
   }
   loading.value = true
-  getImageList(classId.value, currentPage.value, limit.value)
+  getImageList(currentPage.value, {
+    id: classId.value,
+    limit: limit.value
+  })
     .then(res => {
       dataList.value = res.list.map(o => {
         o.checked = false
@@ -137,7 +140,7 @@ const handleDelete = id => {
   deleteImages([id])
     .then(() => {
       toast('操作成功')
-      getData(currentPage.value)
+      getData()
     })
     .finally(() => {
       loading.value = false

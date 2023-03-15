@@ -2,7 +2,7 @@
   <el-aside v-loading="loading" width="220px" class="image-aside">
     <div class="top">
       <aside-list
-        v-for="(item, index) in imageClasses"
+        v-for="(item, index) in tableData"
         :key="index"
         :active="activeId == item.id"
         @edit="handleEdit(item)"
@@ -47,8 +47,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { toast } from '~/composables/utils'
+import { ref } from 'vue'
 import AsideList from '~/components/aside-list.vue'
 import FormDrawer from './form-drawer.vue'
 
@@ -59,64 +58,52 @@ import {
   deleteImageClass
 } from '~/api/image'
 
-const loading = ref(false)
+import { useInitTable, useInitForm } from '~/hooks/useCommon.js'
 
-const imageClasses = ref([])
 const activeId = ref(0)
 
-const currentPage = ref(1)
-const totalCount = ref(0)
-
-const editId = ref(0)
-const drawerTitle = computed(() => (editId.value == 0 ? '新增' : '编辑'))
-const formDrawerRef = ref(null)
-const form = reactive({
-  name: '',
-  order: 1
+const { tableData, loading, totalCount, getData, handleDelete } = useInitTable({
+  getList: getImageClassList,
+  delete: deleteImageClass,
+  onGetListSuccess: res => {
+    activeId.value = res.list[0].id
+    emit('change', res.list[0].id)
+  }
 })
 
-const formRef = ref(null)
-
-const rules = {
-  name: [
-    {
-      required: true,
-      message: '请输入分类标题',
-      trigger: 'blur'
-    }
-  ],
-  order: [
-    {
-      required: true,
-      message: '请选择排序',
-      trigger: 'blur'
-    }
-  ]
-}
-
-const resetForm = (row = []) => {
-  if (formRef.value) {
-    formRef.value.clearValidate()
-  }
-  if (row) {
-    for (const key in form) {
-      form[key] = row[key]
-    }
-  }
-}
-
-const handleCreate = () => {
-  editId.value = 0
-  form.name = ''
-  form.order = imageClasses.value[0] ? imageClasses.value[0].order : 1
-  formDrawerRef.value.open()
-}
-
-const handleEdit = row => {
-  resetForm(row)
-  formDrawerRef.value.open()
-  editId.value = row.id
-}
+const {
+  formDrawerRef,
+  drawerTitle,
+  formRef,
+  form,
+  handleCreate,
+  handleEdit,
+  handleSubmit
+} = useInitForm({
+  form: {
+    name: '',
+    order: 1
+  },
+  rules: {
+    name: [
+      {
+        required: true,
+        message: '请输入分类标题',
+        trigger: 'blur'
+      }
+    ],
+    order: [
+      {
+        required: true,
+        message: '请选择排序',
+        trigger: 'blur'
+      }
+    ]
+  },
+  create: createImageClass,
+  update: updateImageClass,
+  getData
+})
 
 const emit = defineEmits(['change'])
 
@@ -125,62 +112,6 @@ const handleChangeActiveId = id => {
   activeId.value = id
   //将id传递到父组件方法中
   emit('change', id)
-}
-
-function getData(page = null) {
-  if (page) {
-    currentPage.value = page
-  }
-  loading.value = true
-  getImageClassList(currentPage.value)
-    .then(res => {
-      imageClasses.value = res.list
-      totalCount.value = res.totalCount
-      activeId.value = imageClasses.value[0] ? imageClasses.value[0].id : 0
-      handleChangeActiveId(activeId.value)
-    })
-    .finally(() => {
-      loading.value = false
-    })
-}
-
-getData()
-
-const handleSubmit = () => {
-  formRef.value.validate(valid => {
-    if (!valid) {
-      return false
-    }
-    formDrawerRef.value.showLoading()
-
-    const requestFunc =
-      editId.value == 0
-        ? createImageClass(form)
-        : updateImageClass(editId.value, form)
-    requestFunc
-      .then(() => {
-        toast('操作成功')
-        //重新加载数据
-        getData(editId.value ? currentPage.value : 1)
-        formDrawerRef.value.close()
-      })
-      .finally(() => {
-        formDrawerRef.value.hideLoading()
-      })
-  })
-}
-
-const handleDelete = e => {
-  loading.value = true
-  deleteImageClass(e)
-    .then(() => {
-      toast('操作成功')
-      //重新加载数据
-      getData()
-    })
-    .finally(() => {
-      loading.value = false
-    })
 }
 
 defineExpose({
