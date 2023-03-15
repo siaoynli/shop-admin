@@ -55,7 +55,7 @@
         background
         layout="prev,pager, next"
         :total="totalCount"
-        :current-page="current_page"
+        :current-page="currentPage"
         :page-size="limit"
         hide-on-single-page
         @current-change="getData"
@@ -78,7 +78,7 @@ const drawer = ref(false)
 
 const openUploadDrawer = () => (drawer.value = true)
 
-const current_page = ref(1)
+const currentPage = ref(1)
 const totalCount = ref(0)
 const dataList = ref([])
 const loading = ref(false)
@@ -87,10 +87,10 @@ const limit = ref(18)
 
 function getData(page = null) {
   if (page) {
-    current_page.value = page
+    currentPage.value = page
   }
   loading.value = true
-  getImageList(classId.value, current_page.value, limit.value)
+  getImageList(classId.value, currentPage.value, limit.value)
     .then(res => {
       dataList.value = res.list.map(o => {
         o.checked = false
@@ -105,7 +105,7 @@ function getData(page = null) {
 
 //根据分类id加载图片列表
 const loadData = id => {
-  current_page.value = 1
+  currentPage.value = 1
   classId.value = id
   getData()
 }
@@ -137,7 +137,7 @@ const handleDelete = id => {
   deleteImages([id])
     .then(() => {
       toast('操作成功')
-      getData(current_page.value)
+      getData(currentPage.value)
     })
     .finally(() => {
       loading.value = false

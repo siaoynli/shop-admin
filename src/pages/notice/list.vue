@@ -50,7 +50,7 @@
           background
           layout="prev,pager, next"
           :total="totalCount"
-          :current-page="current_page"
+          :current-page="currentPage"
           :page-size="limit"
           hide-on-single-page
           @current-change="getData"
@@ -90,31 +90,16 @@ import {
 } from '~/api/notice'
 import { toast } from '~/composables/utils'
 import FormDrawer from '~/components/form-drawer.vue'
-const tableData = ref([])
-const totalCount = ref(0)
-const current_page = ref(1)
-const limit = ref(15)
-const loading = ref(false)
+
+import { useInitTable } from '~/hooks/useCommon.js'
+
+const { tableData, loading, totalCount, currentPage, limit, getData } =
+  useInitTable({
+    getList: getNoticeList
+  })
 
 const editId = ref(0)
 const drawerTitle = computed(() => (editId.value == 0 ? '新增' : '编辑'))
-
-function getData(page = null) {
-  if (page) {
-    current_page.value = page
-  }
-
-  loading.value = true
-  getNoticeList(current_page.value, limit.value)
-    .then(res => {
-      tableData.value = res.list
-      totalCount.value = res.totalCount
-    })
-    .finally(() => {
-      loading.value = false
-    })
-}
-getData()
 
 const form = reactive({
   title: '',
@@ -176,7 +161,7 @@ const handleSubmit = () => {
       .then(() => {
         toast('操作成功')
         //重新加载数据
-        getData(editId.value ? current_page.value : 1)
+        getData(editId.value ? currentPage.value : 1)
         formDrawerRef.value.close()
       })
       .finally(() => {
@@ -196,7 +181,7 @@ const handleDelete = id => {
   deleteNotice(id)
     .then(() => {
       toast('操作成功')
-      getData(current_page.value)
+      getData(currentPage.value)
     })
     .finally(() => {
       loading.value = false

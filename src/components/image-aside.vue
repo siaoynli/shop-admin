@@ -64,7 +64,7 @@ const loading = ref(false)
 const imageClasses = ref([])
 const activeId = ref(0)
 
-const current_page = ref(1)
+const currentPage = ref(1)
 const totalCount = ref(0)
 
 const editId = ref(0)
@@ -129,10 +129,10 @@ const handleChangeActiveId = id => {
 
 function getData(page = null) {
   if (page) {
-    current_page.value = page
+    currentPage.value = page
   }
   loading.value = true
-  getImageClassList(current_page.value)
+  getImageClassList(currentPage.value)
     .then(res => {
       imageClasses.value = res.list
       totalCount.value = res.totalCount
@@ -161,7 +161,7 @@ const handleSubmit = () => {
       .then(() => {
         toast('操作成功')
         //重新加载数据
-        getData(editId.value ? current_page.value : 1)
+        getData(editId.value ? currentPage.value : 1)
         formDrawerRef.value.close()
       })
       .finally(() => {

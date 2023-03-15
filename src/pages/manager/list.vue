@@ -3,21 +3,26 @@
     <el-card class="border-0" shadow="never">
       <div class="">
         <div class="flex justify-end items-center">
-          <span class="text-sm text-gray-600 mr-3">关键词</span>
-          <el-input
-            v-model="keyword"
-            class="w-50 mr-3"
-            placeholder="请输入管理员昵称"
-            :prefix-icon="Search"
-            clearable
-          /><el-button
-            type="primary"
-            :disabled="keyword == ''"
-            :loading="searchLoading"
-            @click="getData()"
-            >搜索</el-button
-          >
-          <el-button @click="handleReset">重置</el-button>
+          <el-form :model="searchForm" :inline="false">
+            <span class="text-sm text-gray-600 mr-3">关键词</span>
+            <el-input
+              v-model="searchForm.keyword"
+              class="w-50 mr-3"
+              placeholder="请输入管理员昵称"
+              :prefix-icon="Search"
+              clearable
+            /><el-button
+              type="primary"
+              :disabled="searchForm.keyword == ''"
+              @click="getData()"
+              >搜索</el-button
+            >
+            <el-button
+              :disabled="searchForm.keyword == ''"
+              @click="resetSearchForm"
+              >重置</el-button
+            >
+          </el-form>
         </div>
         <div class="flex justify-between items-center">
           <div class="pb-3">
@@ -97,7 +102,7 @@
           background
           layout="prev,pager, next"
           :total="totalCount"
-          :current-page="current_page"
+          :current-page="currentPage"
           :page-size="limit"
           hide-on-single-page
           @current-change="getData"
@@ -187,55 +192,37 @@ import {
 import { toast } from '~/composables/utils'
 import FormDrawer from '~/components/form-drawer.vue'
 import ChooseImage from '~/components/choose-image.vue'
-const tableData = ref([])
-const totalCount = ref(0)
-const current_page = ref(1)
-const limit = ref(15)
-const loading = ref(false)
-const searchLoading = ref(false)
+
+import { useInitTable } from '~/hooks/useCommon.js'
+
 const roles = ref([])
 
-const keyword = ref('')
+const onGetListSuccess = res => {
+  tableData.value = res.list.map(o => {
+    o.statusLoading = false
+    return o
+  })
+  roles.value = res.roles
+  totalCount.value = res.totalCount
+}
+
+const {
+  searchForm,
+  resetSearchForm,
+  tableData,
+  loading,
+  currentPage,
+  totalCount,
+  limit,
+  getData
+} = useInitTable({
+  searchForm: { keyword: '' },
+  getList: getManagerList,
+  onGetListSuccess: onGetListSuccess
+})
 
 const editId = ref(0)
 const drawerTitle = computed(() => (editId.value == 0 ? '新增' : '编辑'))
-
-function getData(page = null) {
-  if (page) {
-    current_page.value = page
-  }
-
-  if (keyword.value) {
-    searchLoading.value = true
-  } else {
-    loading.value = true
-  }
-
-  getManagerList(current_page.value, {
-    limit: limit.value,
-    keyword: keyword.value
-  })
-    .then(res => {
-      tableData.value = res.list.map(o => {
-        o.statusLoading = false
-        return o
-      })
-      roles.value = res.roles
-      totalCount.value = res.totalCount
-    })
-    .finally(() => {
-      loading.value = false
-      searchLoading.value = false
-    })
-}
-getData()
-
-const handleReset = () => {
-  if (keyword.value) {
-    keyword.value = ''
-    getData()
-  }
-}
 
 const form = reactive({
   username: '',
@@ -247,7 +234,6 @@ const form = reactive({
 })
 
 //重置表单用到的变量
-
 const formDrawerRef = ref(null)
 const formRef = ref(null)
 
@@ -290,7 +276,7 @@ const handleSubmit = () => {
       .then(() => {
         toast('操作成功')
         //重新加载数据
-        getData(editId.value ? current_page.value : 1)
+        getData(editId.value ? currentPage.value : 1)
         formDrawerRef.value.close()
       })
       .finally(() => {
@@ -323,7 +309,7 @@ const handleDelete = id => {
   deleteManager(id)
     .then(() => {
       toast('操作成功')
-      getData(current_page.value)
+      getData(currentPage.value)
     })
     .finally(() => {
       loading.value = false
