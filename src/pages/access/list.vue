@@ -26,10 +26,24 @@
                 :active-value="1"
                 :inactive-value="0"
                 class="mr-5"
+                :loading="data.statusLoading"
+                @change="value => handleChangeStatus(value, data)"
               />
               <el-button type="primary" link>修改</el-button>
               <el-button type="primary" link>添加</el-button>
-              <el-button type="primary" link>删除</el-button>
+              <el-popconfirm
+                title="确定要删除这条记录吗?"
+                confirm-button-text="是"
+                cancel-button-text="否"
+                width="220"
+                @confirm="handleDelete(data.id)"
+              >
+                <template #reference>
+                  <el-button link type="danger" @click.stop="() => {}"
+                    >删除</el-button
+                  >
+                </template>
+              </el-popconfirm>
             </div>
           </div>
         </template>
@@ -40,7 +54,7 @@
 <script setup>
 import { ref } from 'vue'
 import ListHeader from '~/components/list-header.vue'
-import { getRuleList } from '~/api/rule'
+import { getRuleList, deleteRule, updateManagerStatus } from '~/api/rule'
 
 import { useInitTable, useInitForm } from '~/hooks/useCommon'
 
@@ -55,8 +69,14 @@ const { tableData, loading, getData, handleDelete, handleChangeStatus } =
   useInitTable({
     getList: getRuleList,
     onGetListSuccess: res => {
+      tableData.value = res.list.map(o => {
+        o.statusLoading = false
+        return o
+      })
       defaultExpandedKeys.value = res.list.map(o => o.id)
-    }
+    },
+    delete: deleteRule,
+    updateStatus: updateManagerStatus
   })
 
 const {

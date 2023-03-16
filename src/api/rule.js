@@ -15,3 +15,7 @@ export function updateRule(id, data) {
 export function deleteRule(id) {
   return axios.post(`/admin/rule/${id}/delete`)
 }
+
+export function updateManagerStatus(id, status = 0) {
+  return axios.post(`/admin/rule/${id}/update_status`, { status })
+}
