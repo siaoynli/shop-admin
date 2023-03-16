@@ -1,7 +1,7 @@
 import axios from '~/axios'
 
 export function getNoticeList(page = 1, params = { limit: 10 }) {
-  return axios.get(`/admin/notice/${page}?limit=${params.limit}`)
+  return axios.get(`/admin/notice/${page}`, { params })
 }
 
 export function createNotice(data) {
