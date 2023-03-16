@@ -24,21 +24,7 @@
             >
           </el-form>
         </div>
-        <div class="flex justify-between items-center">
-          <div class="pb-3">
-            <el-button
-              type="primary"
-              class="text-gray-200"
-              @click="handleCreate"
-              >新增</el-button
-            >
-          </div>
-          <el-tooltip effect="dark" content="刷新数据" placement="top">
-            <el-icon class="cursor-pointer" @click="getData()"
-              ><Refresh
-            /></el-icon>
-          </el-tooltip>
-        </div>
+        <list-header @create="handleCreate" @refresh="getData"></list-header>
       </div>
       <el-table
         v-loading="loading"
@@ -190,6 +176,7 @@ import {
 } from '~/api/manager'
 import FormDrawer from '~/components/form-drawer.vue'
 import ChooseImage from '~/components/choose-image.vue'
+import ListHeader from '~/components/list-header.vue'
 
 import { useInitTable, useInitForm } from '~/hooks/useCommon.js'
 import { useValidator } from '~/hooks/useValidator.js'

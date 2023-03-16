@@ -1,6 +1,13 @@
 <template>
   <router-view></router-view>
 </template>
+<script lang="ts">
+console.log(
+  ' %c 杭州网版权所有 %c  © 西瓜哥  https://www.hangzhou.com.cn ',
+  'color:#FFFFFB;background:#1890ff;padding:5px 0;border-radius:.5rem 0 0 .5rem;',
+  'color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;'
+)
+</script>
 
 <style lang="postcss">
 body {

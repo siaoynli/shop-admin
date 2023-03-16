@@ -71,6 +71,14 @@ const asyncRoutes = [
     }
   },
   {
+    path: '/access/list',
+    component: () => import('~/pages/access/list.vue'),
+    name: '/access/list',
+    meta: {
+      title: '权限管理'
+    }
+  },
+  {
     path: '/comment/list',
     component: () => import('~/pages/comment/list.vue'),
     name: '/comment/list',

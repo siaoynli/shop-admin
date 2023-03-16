@@ -1,18 +1,7 @@
 <template>
   <div>
     <el-card class="border-0" shadow="never">
-      <div class="flex justify-between items-center">
-        <div class="pb-3">
-          <el-button type="primary" class="text-gray-200" @click="handleCreate"
-            >新增</el-button
-          >
-        </div>
-        <el-tooltip effect="dark" content="刷新数据" placement="top">
-          <el-icon class="cursor-pointer" @click="getData()"
-            ><Refresh
-          /></el-icon>
-        </el-tooltip>
-      </div>
+      <list-header @create="handleCreate" @refresh="getData"></list-header>
       <el-table
         v-loading="loading"
         :data="tableData"
@@ -89,7 +78,7 @@ import {
 } from '~/api/notice'
 
 import FormDrawer from '~/components/form-drawer.vue'
-
+import ListHeader from '~/components/list-header.vue'
 import { useInitTable, useInitForm } from '~/hooks/useCommon.js'
 
 const {
