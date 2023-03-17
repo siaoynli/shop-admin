@@ -1,7 +1,7 @@
 <template>
   <router-view></router-view>
 </template>
-<script lang="ts">
+<script setup>
 console.log(
   ' %c 杭州网版权所有 %c  © 西瓜哥  https://www.hangzhou.com.cn ',
   'color:#FFFFFB;background:#1890ff;padding:5px 0;border-radius:.5rem 0 0 .5rem;',

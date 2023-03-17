@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import WindiCSS from 'vite-plugin-windicss'
 import eslintPlugin from 'vite-plugin-eslint'
 import progress from 'vite-plugin-progress'
+import colors from 'picocolors'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import viteCompression from 'vite-plugin-compression'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -15,6 +16,8 @@ export default defineConfig(configEnv => {
   const srcPath = path.resolve(__dirname, 'src')
 
   const isOpenProxy = !!viteEnv.VITE_HTTP_PROXY
+
+  const outDir = path.resolve(__dirname, 'dist')
 
   const envConfig = {
     proxyPattern: '/api',
@@ -39,6 +42,18 @@ export default defineConfig(configEnv => {
       sourcemap: false,
       commonjsOptions: {
         ignoreTryCatch: false
+      },
+      cssCodeSplit: false,
+      outDir: outDir,
+      emptyOutDir: true,
+      chunkSizeWarningLimit: 1500,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // 分包配置，配置完成自动按需加载
+            vue: ['vue', 'vue-router', 'element-plus']
+          }
+        }
       }
     }
   }
@@ -60,7 +75,13 @@ function setupVitePlugins(viteEnv) {
         }
       }
     }),
-    progress(),
+    progress({
+      format: `${colors.green(colors.bold('Bouilding'))} ${colors.cyan(
+        '[:bar]'
+      )} :percent`
+      // complete: '=',
+      // incomplete: ''
+    }),
     viteCompression(),
     visualizer({
       gzipSize: true,
