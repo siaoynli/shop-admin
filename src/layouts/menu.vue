@@ -1,35 +1,39 @@
 <template lang="">
   <div class="f-menu" :style="{ width: $store.state.asideWidth }">
-    <el-menu
-      unique-opened
-      class="border-0"
-      :collapse-transition="false"
-      :collapse="isCollapse"
-      :default-active="defaultActive"
-      @select="handleSelect"
-    >
-      <template v-for="(item, index) in asideMenus" :key="index">
-        <el-sub-menu v-if="item.child && item.child.length" :index="item.name">
-          <template #title>
+    <el-scrollbar>
+      <el-menu
+        class="border-0"
+        :collapse-transition="false"
+        :collapse="isCollapse"
+        :default-active="defaultActive"
+        @select="handleSelect"
+      >
+        <template v-for="(item, index) in asideMenus" :key="index">
+          <el-sub-menu
+            v-if="item.child && item.child.length"
+            :index="item.name"
+          >
+            <template #title>
+              <el-icon><component :is="item.icon"></component></el-icon>
+              <span>{{ item.name }}</span>
+            </template>
+            <el-menu-item
+              v-for="(_item, _index) in item.child"
+              :key="_index"
+              :index="_item.frontpath"
+            >
+              <el-icon><component :is="_item.icon"></component></el-icon>
+              <span> {{ _item.name }}</span>
+            </el-menu-item>
+          </el-sub-menu>
+
+          <el-menu-item v-else :index="item.frontpath">
             <el-icon><component :is="item.icon"></component></el-icon>
             <span>{{ item.name }}</span>
-          </template>
-          <el-menu-item
-            v-for="(_item, _index) in item.child"
-            :key="_index"
-            :index="_item.frontpath"
-          >
-            <el-icon><component :is="_item.icon"></component></el-icon>
-            <span> {{ _item.name }}</span>
           </el-menu-item>
-        </el-sub-menu>
-
-        <el-menu-item v-else :index="item.frontpath">
-          <el-icon><component :is="item.icon"></component></el-icon>
-          <span>{{ item.name }}</span>
-        </el-menu-item>
-      </template>
-    </el-menu>
+        </template>
+      </el-menu>
+    </el-scrollbar>
   </div>
 </template>
 <script setup>
@@ -65,9 +69,6 @@ onBeforeRouteUpdate(to => {
   top: 64px;
   bottom: 0;
   left: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: all 200ms;
   @apply shadow-md fixed bg-light-50;
 }
 </style>
