@@ -95,7 +95,7 @@
           />
         </el-form-item>
         <el-form-item v-if="form.menu == 1" prop="icon" label="菜单图标">
-          <el-input v-model="form.icon" />
+          <icon-select v-model="form.icon" />
         </el-form-item>
         <el-form-item
           v-if="form.menu == 1 && form.role_id > 1"
@@ -137,6 +137,7 @@
 import { ref } from 'vue'
 import ListHeader from '~/components/list-header.vue'
 import FormDrawer from '~/components/form-drawer.vue'
+import IconSelect from '~/components/icon-select.vue'
 import {
   getRuleList,
   createRule,
