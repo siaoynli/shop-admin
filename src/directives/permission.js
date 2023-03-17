@@ -18,13 +18,13 @@ function hasPermission(value, el = false) {
 
 export default {
   install(app) {
-    console.log('permission：', app)
+    console.log(`output->v-permission`, app)
     app.directive('permission', {
       // el 节点
       // binding  v-permission绑定的值
       mounted: (el, binding) => {
-        console.log(el)
-        console.log(binding)
+        console.log(`output->el`, el)
+        console.log(`output->binding.value`, binding.value)
         hasPermission(binding.value, el)
       }
     })

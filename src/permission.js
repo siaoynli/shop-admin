@@ -7,12 +7,12 @@ import store from './store'
 let hasGetInfo = false
 
 router.beforeEach(async (to, from, next) => {
+  console.log(`output->to`, to)
+  console.log(`output->from`, from)
   //显示全局loading
   showFullLoading()
 
   const token = getToken()
-  console.log('to:', to)
-  console.log('from:', from)
   if (!token && to.path != '/login') {
     toast('请先登陆', 'error')
     //路由配置了名字可以这么使用

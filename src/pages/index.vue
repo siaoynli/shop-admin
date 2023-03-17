@@ -83,7 +83,6 @@ import { getStatistics1, getStatistics2 } from '~/api/index'
 const panelsData = ref([])
 getStatistics1().then(({ panels }) => {
   panelsData.value = panels
-  console.log(panelsData.value)
 })
 
 const goods = ref([])
