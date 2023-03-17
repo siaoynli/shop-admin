@@ -24,6 +24,7 @@ export default defineConfig(configEnv => {
 
   return {
     server: {
+      open: true,
       proxy: createViteProxy(isOpenProxy, envConfig)
     },
     plugins: setupVitePlugins(viteEnv),
