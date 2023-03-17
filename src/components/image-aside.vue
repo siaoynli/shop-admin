@@ -76,6 +76,7 @@ const {
   drawerTitle,
   formRef,
   form,
+  rules,
   handleCreate,
   handleEdit,
   handleSubmit
