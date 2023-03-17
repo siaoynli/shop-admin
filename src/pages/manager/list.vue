@@ -105,7 +105,9 @@
         <el-form-item
           prop="username"
           label="用户名"
-          :rules="[{ required: true, message: '请输入用户名' }]"
+          :rules="[
+            { required: true, message: '请输入用户名', trigger: 'blur' }
+          ]"
         >
           <el-input v-model.trim="form.username" placeholder="" />
         </el-form-item>
