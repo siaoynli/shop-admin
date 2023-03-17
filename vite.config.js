@@ -14,10 +14,8 @@ export default defineConfig(configEnv => {
   const viteEnv = loadEnv(configEnv.mode, process.cwd())
 
   const srcPath = path.resolve(__dirname, 'src')
-
-  const isOpenProxy = !!viteEnv.VITE_HTTP_PROXY
-
   const outDir = path.resolve(__dirname, 'dist')
+  const isOpenProxy = !!viteEnv.VITE_HTTP_PROXY
 
   const envConfig = {
     proxyPattern: '/api',
@@ -46,7 +44,8 @@ export default defineConfig(configEnv => {
       cssCodeSplit: false,
       outDir: outDir,
       emptyOutDir: true,
-      chunkSizeWarningLimit: 1500,
+      minify: 'esbuild',
+      chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
           manualChunks: {
@@ -84,7 +83,7 @@ function setupVitePlugins(viteEnv) {
     }),
     viteCompression(),
     visualizer({
-      gzipSize: true,
+      gzipSize: false,
       brotliSize: true,
       open: true,
       emitFile: true,
