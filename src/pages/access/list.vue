@@ -66,9 +66,9 @@
         :inline="false"
         label-width="150px"
       >
-        <el-form-item prop="role_id" label="上级菜单">
+        <el-form-item prop="rule_id" label="上级菜单">
           <el-cascader
-            v-model="form.role_id"
+            v-model="form.rule_id"
             :options="options"
             :props="{
               value: 'id',
@@ -98,7 +98,7 @@
           <icon-select v-model="form.icon" />
         </el-form-item>
         <el-form-item
-          v-if="form.menu == 1 && form.role_id > 1"
+          v-if="form.menu == 1 && form.rule_id > 1"
           prop="frontpath"
           label="前端路由"
         >
@@ -172,7 +172,6 @@ const { tableData, loading, getData, handleDelete, handleChangeStatus } =
   })
 
 const {
-  editId,
   formDrawerRef,
   drawerTitle,
   form,
