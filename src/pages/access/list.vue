@@ -98,7 +98,7 @@
           <icon-select v-model="form.icon" />
         </el-form-item>
         <el-form-item
-          v-if="form.menu == 1 && form.rule_id > 1"
+          v-if="form.menu == 1 && form.role_id > 1"
           prop="frontpath"
           label="前端路由"
         >
