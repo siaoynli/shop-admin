@@ -79,6 +79,14 @@ const asyncRoutes = [
     }
   },
   {
+    path: '/role/list',
+    component: () => import('~/pages/role/list.vue'),
+    name: '/role/list',
+    meta: {
+      title: '角色管理'
+    }
+  },
+  {
     path: '/comment/list',
     component: () => import('~/pages/comment/list.vue'),
     name: '/comment/list',

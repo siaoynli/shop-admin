@@ -9,10 +9,10 @@
     <div class="form-drawer">
       <div class="body"><slot></slot></div>
       <div class="actions">
-        <el-button type="default" @click="close">取消</el-button>
         <el-button type="primary" :loading="loading" @click="handleSubmit">{{
           confirmText
         }}</el-button>
+        <el-button type="default" @click="close">取消</el-button>
       </div>
     </div>
   </el-drawer>
