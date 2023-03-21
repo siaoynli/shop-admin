@@ -7,7 +7,9 @@
     :destroy-on-close="destroyOnClose"
   >
     <div class="form-drawer">
-      <div class="body"><slot></slot></div>
+      <el-scrollbar
+        ><div class="body"><slot></slot></div
+      ></el-scrollbar>
       <div class="actions">
         <el-button type="primary" :loading="loading" @click="handleSubmit">{{
           confirmText
@@ -72,7 +74,6 @@ defineExpose({
 }
 .body {
   flex: 1;
-  overflow-y: auto;
 }
 
 .actions {

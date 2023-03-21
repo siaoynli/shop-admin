@@ -1,17 +1,20 @@
 <template>
   <el-aside v-loading="loading" width="220px" class="image-aside">
     <div class="top">
-      <aside-list
-        v-for="(item, index) in tableData"
-        :key="index"
-        :active="activeId == item.id"
-        @edit="handleEdit(item)"
-        @delete="handleDelete(item.id)"
-        @click="handleChangeActiveId(item.id)"
-      >
-        {{ item.name }}
-      </aside-list>
+      <el-scrollbar>
+        <aside-list
+          v-for="(item, index) in tableData"
+          :key="index"
+          :active="activeId == item.id"
+          @edit="handleEdit(item)"
+          @delete="handleDelete(item.id)"
+          @click="handleChangeActiveId(item.id)"
+        >
+          {{ item.name }}
+        </aside-list>
+      </el-scrollbar>
     </div>
+
     <div class="bottom">
       <el-pagination
         background
@@ -133,7 +136,6 @@ defineExpose({
   left: 0;
   right: 0;
   bottom: 50px;
-  overflow-y: auto;
 }
 
 .image-aside .bottom {

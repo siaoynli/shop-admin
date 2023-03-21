@@ -24,6 +24,9 @@
         </el-table-column>
         <el-table-column align="right" label="操作" width="180">
           <template #default="scope">
+            <el-button size="small" link @click="openSetRule(scope.row)"
+              >设置权限</el-button
+            >
             <el-button size="small" link @click="handleEdit(scope.row)"
               >编辑</el-button
             >
@@ -84,21 +87,55 @@
         </el-form-item>
       </el-form>
     </form-drawer>
+    <!-- 权限配置 -->
+    <form-drawer
+      ref="setRuleFormDrawerRef"
+      :title="ruleDrawerTitle"
+      @submit="handleSetRuleSubmit"
+    >
+      <el-tree
+        ref="relTreeRef"
+        :data="ruleListData"
+        :props="{
+          children: 'child',
+          label: 'name'
+        }"
+        node-key="id"
+        :default-expanded-keys="defaultExpandedKeys"
+        :height="treeHeight"
+        show-checkbox
+      >
+        <template #default="{ data }">
+          <div class="tree-nodes">
+            <el-tag size="small" :type="data.menu ? '' : 'info'">
+              {{ data.menu == 1 ? '菜单' : '权限' }}</el-tag
+            >
+            <el-icon v-if="data.icon" :size="16" class="mr-2 ml-2">
+              <component :is="data.icon"></component>
+            </el-icon>
+            <span>{{ data.name }}</span>
+          </div>
+        </template>
+      </el-tree>
+    </form-drawer>
   </div>
 </template>
 <script setup>
+import { ref } from 'vue'
+import { toast } from '~/composables/utils'
 import {
   getRoleList,
   deleteRole,
   createRole,
   updateRole,
-  updateRoleStatus
+  updateRoleStatus,
+  setRules
 } from '~/api/role'
 
 import FormDrawer from '~/components/form-drawer.vue'
 import ListHeader from '~/components/list-header.vue'
 import { useInitTable, useInitForm } from '~/hooks/useCommon.js'
-
+import { getRuleList } from '~/api/rule'
 const {
   tableData,
   loading,
@@ -156,4 +193,48 @@ const {
   create: createRole,
   update: updateRole
 })
+
+const setRuleFormDrawerRef = ref(null)
+
+const relTreeRef = ref(null)
+
+const ruleDrawerTitle = ref('权限配置')
+
+const defaultExpandedKeys = ref([])
+const ruleListData = ref([])
+const treeHeight = ref(0)
+const roleId = ref(0)
+
+const ruleIds = ref([])
+
+const openSetRule = row => {
+  ruleDrawerTitle.value = `配置权限:  ${row.name} `
+  treeHeight.value = window.innerHeight - 180
+  roleId.value = row.id
+
+  getRuleList().then(res => {
+    ruleListData.value = res.list
+    defaultExpandedKeys.value = res.list.map(o => o.id)
+    ruleIds.value = row.rules.map(o => o.id)
+    setRuleFormDrawerRef.value.open()
+    setTimeout(() => {
+      relTreeRef.value.setCheckedKeys(ruleIds.value)
+    }, 100)
+  })
+}
+
+const handleSetRuleSubmit = () => {
+  const ruleIds = relTreeRef.value.getCheckedKeys()
+  ruleIds.value = ruleIds
+  setRuleFormDrawerRef.value.showLoading()
+  setRules(roleId.value, ruleIds)
+    .then(() => {
+      toast('操作成功')
+      setRuleFormDrawerRef.value.close()
+      getData()
+    })
+    .finally(() => {
+      setRuleFormDrawerRef.value.hideLoading()
+    })
+}
 </script>
