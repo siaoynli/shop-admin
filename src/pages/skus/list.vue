@@ -68,6 +68,7 @@
     <form-drawer
       ref="formDrawerRef"
       :title="drawerTitle"
+      destroy-on-close
       @submit="handleSubmit"
     >
       <el-form
@@ -91,7 +92,7 @@
           />
         </el-form-item>
         <el-form-item prop="default" label="规格值">
-          <el-input v-model="form.default" placeholder="" />
+          <tag-input v-model="form.default" />
         </el-form-item>
       </el-form>
     </form-drawer>
@@ -110,6 +111,7 @@ import {
 
 import FormDrawer from '~/components/form-drawer.vue'
 import ListHeader from '~/components/list-header.vue'
+import TagInput from '~/components/tag-input.vue'
 import { useInitTable, useInitForm } from '~/hooks/useCommon.js'
 
 const {
