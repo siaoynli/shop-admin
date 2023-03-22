@@ -2,12 +2,14 @@
   <div>
     <el-card class="border-0" shadow="never">
       <list-header
-        show-delete-btn
+        layout="create,delete,refresh"
+        :multi-selection-ids="multiSelectionIds"
         @create="handleCreate"
         @refresh="getData"
-        @delete="handleDeleteAll"
+        @delete="handleMultiDelete"
       ></list-header>
       <el-table
+        ref="multipleTableRef"
         v-loading="loading"
         :data="tableData"
         stripe
@@ -16,7 +18,13 @@
       >
         <el-table-column type="selection" width="55" />
         <el-table-column prop="name" label="规格名称" width="180" />
-        <el-table-column prop="default" label="规格值" />
+        <el-table-column label="规格值">
+          <template #default="{ row }">
+            <el-tag v-for="tag in row.tags" :key="tag" class="mx-1">{{
+              tag
+            }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="order" label="排序" width="180" />
         <el-table-column label="状态" width="180">
           <template #default="{ row }">
@@ -99,8 +107,6 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-import { toast, showModal } from '~/composables/utils'
 import {
   getSkusList,
   deleteSkus,
@@ -122,11 +128,16 @@ const {
   limit,
   getData,
   handleDelete,
-  handleChangeStatus
+  handleChangeStatus,
+  multiSelectionIds,
+  handleSelectionChange,
+  multipleTableRef,
+  handleMultiDelete
 } = useInitTable({
   onGetListSuccess: res => {
     tableData.value = res.list.map(o => {
       o.statusLoading = false
+      o.tags = o.default.split(',')
       return o
     })
     totalCount.value = res.totalCount
@@ -165,22 +176,4 @@ const {
   create: createSkus,
   update: updateSkus
 })
-
-const selectIds = ref([])
-
-const handleSelectionChange = rows => {
-  selectIds.value = rows.map(o => o.id)
-}
-
-const handleDeleteAll = () => {
-  if (selectIds.value.length == 0) {
-    toast('请选择要删除的记录', 'error')
-    return
-  }
-  showModal('您确认要删除这些记录吗?')
-    .then(() => {
-      handleDelete(selectIds.value)
-    })
-    .catch(() => {})
-}
 </script>
